@@ -1,5 +1,9 @@
 <template>
-  <DefaultLayout>
+  <!-- Show the password gate until the user is authenticated -->
+  <AuthGate v-if="!isAuthenticated" />
+
+  <!-- Main app (only after sign-in) -->
+  <DefaultLayout v-else>
     <router-view />
   </DefaultLayout>
 </template>
@@ -7,11 +11,15 @@
 <script>
 import { ref } from 'vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import AuthGate from '@/components/AuthGate.vue'
+import { useAuth } from '@/composables/useAuth'
 
 export default {
   name: 'App',
-  components: { DefaultLayout },
+  components: { DefaultLayout, AuthGate },
   setup() {
+    const { isAuthenticated } = useAuth()
+
     const isDark = ref(false)
 
     function toggleDark() {
@@ -24,7 +32,7 @@ export default {
       document.documentElement.classList.add('dark')
     }
 
-    return { isDark, toggleDark }
+    return { isAuthenticated, isDark, toggleDark }
   },
 }
 </script>
