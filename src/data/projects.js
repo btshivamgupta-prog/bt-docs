@@ -47,21 +47,22 @@ export const projects = {
             slug: 'bom-product',
             title: 'Products & Parts',
             children: [
-              { slug: 'overview', title: 'BOM Overview',
+              
+              { slug: 'components', title: 'Parts' },
+              {
+                slug: 'assembly',
+                title: 'Products',
+                // children: [
+                //   { slug: 'electronics', title: 'Electronics' },
+                //   { slug: 'mechanical', title: 'Mechanical' },
+                // ],
+              },
+              { slug: 'overview', title: 'BOM Product',
                 children: [
                   { slug: 'bom-intro', title: 'Overview' },
                   { slug: 'finished-unit', title: 'Finisehd Unit' },
                 ],
                },
-              { slug: 'components', title: 'Parts' },
-              {
-                slug: 'assembly',
-                title: 'Products',
-                children: [
-                  { slug: 'electronics', title: 'Electronics' },
-                  { slug: 'mechanical', title: 'Mechanical' },
-                ],
-              },
             ],
           },
           // { slug: 'installation', title: 'Installation' },
