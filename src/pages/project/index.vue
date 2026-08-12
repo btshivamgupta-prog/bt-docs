@@ -21,50 +21,25 @@
 
     <!-- Not found -->
     <div v-else-if="!currentProject" class="py-12 text-center">
-      <div class="text-6xl mb-4">??</div>
+      <div class="text-6xl mb-4">📄</div>
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Project Not Found</h2>
       <p class="text-gray-600 dark:text-gray-400 mb-6">The project you are looking for does not exist.</p>
       <router-link
         to="/"
         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
       >
-        &larr; Back to Home
+        ← Back to Home
       </router-link>
     </div>
 
-    <!-- Documentation content -->
-    <div v-else class="prose" v-html="renderedContent"></div>
+    <!-- Documentation content (only when a leaf page resolves) -->
+    <div v-else-if="!showLanding" class="prose" v-html="renderedContent"></div>
 
-    <!-- Section navigation cards (shown on project landing or section landing) -->
-    <div v-if="currentProject && !pageContent && !loading" class="mt-8">
-      <div v-if="currentSection" class="grid gap-4 sm:grid-cols-2">
-        <router-link
-          v-for="page in currentSection.pages"
-          :key="page.slug"
-          :to="`/${$route.params.project}/${$route.params.section}/${page.slug}`"
-          class="group rounded-lg border border-gray-200 dark:border-gray-800 p-4 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-sm transition-all"
-        >
-          <h4 class="font-medium text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">
-            {{ page.title }}
-          </h4>
-        </router-link>
-      </div>
-      <div v-else class="space-y-8">
-        <div v-for="(section, slug) in currentProject.sections" :key="slug">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">{{ section.title }}</h3>
-          <div class="grid gap-3 sm:grid-cols-2">
-            <router-link
-              v-for="page in section.pages"
-              :key="page.slug"
-              :to="`/${$route.params.project}/${slug}/${page.slug}`"
-              class="group rounded-lg border border-gray-200 dark:border-gray-800 p-4 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-sm transition-all"
-            >
-              <h4 class="font-medium text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">
-                {{ page.title }}
-              </h4>
-            </router-link>
-          </div>
-        </div>
+    <!-- Landing navigation (project / section / any parent node with children) -->
+    <div v-else class="mt-8 space-y-8">
+      <div v-for="group in landingGroups" :key="group.title">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">{{ group.title }}</h3>
+        <PageCards :items="group.items" :base-path="group.basePath" />
       </div>
     </div>
 
@@ -81,112 +56,118 @@
     </div>
   </div>
 </template>
-
 <script>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDocs } from '@/composables/useDocs'
+import PageCards from '@/components/PageCards.vue'
+import { marked } from 'marked'
 
 export default {
   name: 'ProjectDocPage',
+  components: { PageCards },
   setup() {
     const route = useRoute()
-    const { currentProject, currentSection, getEditUrl } = useDocs()
+    const { currentProject, currentSection, currentPage, segments, getEditUrl } = useDocs()
     const pageContent = ref(null)
     const loading = ref(false)
 
     const editUrl = computed(() => {
       if (!route.params.project) return '#'
-      return getEditUrl(route.params.project, route.params.section, route.params.page)
+      return getEditUrl(route.params.project, segments.value)
     })
 
     const renderedContent = computed(() => {
       if (!pageContent.value) return ''
-      // Simple markdown-like rendering (in production, use a proper markdown parser)
       return renderMarkdown(pageContent.value)
     })
 
+    // Landing is shown when: project landing, section landing, or a parent node with children.
+    const showLanding = computed(() => {
+      const page = currentPage.value
+      const segs = segments.value
+      if (!currentProject.value) return false
+      if (segs.length <= 1) return true
+      if (page && page.children && page.children.length) return true
+      return false
+    })
+
+    const landingGroups = computed(() => {
+      const project = currentProject.value
+      const segs = segments.value
+      if (!project) return []
+
+      // Project landing: show every section, each with its pages
+      if (segs.length === 0) {
+        return Object.entries(project.sections).map(([slug, s]) => ({
+          title: s.title,
+          items: s.pages,
+          basePath: `/${project.slug}/${slug}`,
+        }))
+      }
+
+      const section = currentSection.value
+      if (!section) return []
+
+      // Section landing: show this section's pages
+      if (segs.length === 1) {
+        return [{ title: section.title, items: section.pages, basePath: `/${project.slug}/${segs[0]}` }]
+      }
+
+      // Parent node landing: show its children
+      const page = currentPage.value
+      if (page && page.children && page.children.length) {
+        return [{ title: page.title, items: page.children, basePath: `/${project.slug}/${segs.join('/')}` }]
+      }
+
+      return []
+    })
+
     async function fetchContent() {
-      const { project, section, page } = route.params
-      if (!project || !section || !page) {
+      const project = route.params.project
+      const segs = segments.value
+      if (!project || segs.length === 0 || showLanding.value) {
         pageContent.value = null
         return
       }
 
       loading.value = true
       try {
-        const url = `/content/${project}/${section}/${page}.md`
+        const url = `/content/${project}/${segs.join('/')}.md`
         const response = await fetch(url)
         if (response.ok) {
           pageContent.value = await response.text()
         } else {
-          pageContent.value = generatePlaceholderContent(project, section, page)
+          pageContent.value = generatePlaceholderContent(project, segs)
         }
       } catch {
-        pageContent.value = generatePlaceholderContent(project, section, page)
+        pageContent.value = generatePlaceholderContent(project, segs)
       } finally {
         loading.value = false
       }
     }
 
-    function generatePlaceholderContent(project, section, page) {
-      const title = page.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+    function generatePlaceholderContent(project, segs) {
+      const leaf = segs[segs.length - 1]
+      const title = leaf.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
       return `# ${title}
 
-This is the documentation page for **${title}** in the ${project} project, under the ${section} section.
+This is the documentation page for **${title}** in the ${project} project.
 
 ## Overview
 
 This section provides detailed information about ${title.toLowerCase()}. Content for this page is being developed and will be available soon.
 
-## Getting Started
-
-To get started with ${title.toLowerCase()}, follow the steps below:
-
-1. First, ensure you have all prerequisites installed
-2. Configure your environment settings
-3. Run the setup command
-
-???? npm install
-???? npm run setup
-
-## Additional Resources
-
-- [Official Documentation](#)
-- [GitHub Repository](#)
-- [Community Forum](#)
-
-> **Note:** This is placeholder content. Replace it with actual documentation by creating markdown files in the \`content/\` directory.
+> **Note:** This is placeholder content. Replace it with actual documentation in the \`content/\` directory.
 `
     }
 
     function renderMarkdown(md) {
-      // Basic markdown to HTML converter (for production, use marked or markdown-it)
-      let html = md
-        // Headings
-        .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
-        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-        // Bold & Italic
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        // Code blocks
-        .replace(/``````(\w*)\n([\s\S]*?)``````/gm, '<pre><code class="language-$1">$2</code></pre>')
-        .replace(/\`([^\`]+)\`/g, '<code>$1</code>')
-        // Links
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-        // Lists
-        .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-        .replace(/^\- (.+)$/gm, '<li>$1</li>')
-        // Blockquotes
-        .replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
-        // Horizontal rules
-        .replace(/^---$/gm, '<hr>')
-        // Paragraphs (double newlines)
-        .replace(/\n\n/g, '</p><p>')
-
-      return '<p>' + html + '</p>'
+      // Use the marked parser for correct rendering of tables, blockquotes,
+      // nested lists, code blocks, headings, etc.
+      return marked.parse(md, {
+        gfm: true,
+      })
     }
 
     onMounted(() => fetchContent())
@@ -199,6 +180,8 @@ To get started with ${title.toLowerCase()}, follow the steps below:
       loading,
       editUrl,
       renderedContent,
+      showLanding,
+      landingGroups,
     }
   },
 }

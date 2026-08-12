@@ -8,6 +8,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <title>BT Docs - Documentation</title>
+  <script>
+    // Apply the user's saved theme (or system preference) before the page paints,
+    // to avoid a flash of the wrong theme on refresh.
+    (function () {
+      try {
+        var saved = localStorage.getItem('bt_docs_theme');
+        var dark = (saved === 'dark') || (saved === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
   <div id="app"></div>

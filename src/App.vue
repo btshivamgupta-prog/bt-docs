@@ -9,29 +9,17 @@
 </template>
 
 <script>
-import { ref } from 'vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import AuthGate from '@/components/AuthGate.vue'
 import { useAuth } from '@/composables/useAuth'
+import { useTheme } from '@/composables/useTheme'
 
 export default {
   name: 'App',
   components: { DefaultLayout, AuthGate },
   setup() {
     const { isAuthenticated } = useAuth()
-
-    const isDark = ref(false)
-
-    function toggleDark() {
-      isDark.value = !isDark.value
-      document.documentElement.classList.toggle('dark', isDark.value)
-    }
-
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      isDark.value = true
-      document.documentElement.classList.add('dark')
-    }
-
+    const { isDark, toggleDark } = useTheme()
     return { isAuthenticated, isDark, toggleDark }
   },
 }

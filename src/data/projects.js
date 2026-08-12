@@ -34,34 +34,54 @@
 export const projects = {
 
   // ── Project 1 ──────────────────────────────────────────────────────────────
-  'project-one': {
+  'rokko': {
     name: 'ROKKO',
     description: 'A powerful backend service for handling API requests with ease.',
     icon: '🚀',
     repo: 'https://github.com/your-org/project-one',
     sections: {
       'getting-started': {
-        title: 'Getting Started',
+        title: 'Modules',
         pages: [
-          { slug: 'introduction', title: 'Introduction' },
-          { slug: 'installation', title: 'Installation' },
-          { slug: 'quick-start', title: 'Quick Start' },
+          {
+            slug: 'bom-product',
+            title: 'Products & Parts',
+            children: [
+              { slug: 'overview', title: 'BOM Overview',
+                children: [
+                  { slug: 'bom-intro', title: 'Overview' },
+                  { slug: 'finished-unit', title: 'Finisehd Unit' },
+                ],
+               },
+              { slug: 'components', title: 'Parts' },
+              {
+                slug: 'assembly',
+                title: 'Products',
+                children: [
+                  { slug: 'electronics', title: 'Electronics' },
+                  { slug: 'mechanical', title: 'Mechanical' },
+                ],
+              },
+            ],
+          },
+          // { slug: 'installation', title: 'Installation' },
+          // { slug: 'quick-start', title: 'Quick Start' },
         ],
       },
-      'guides': {
-        title: 'Guides',
-        pages: [
-          { slug: 'authentication', title: 'Authentication' },
-          { slug: 'data-models', title: 'Data Models' },
-          { slug: 'error-handling', title: 'Error Handling' },
-        ],
-      },
+      // 'guides': {
+      //   title: 'Guides',
+      //   pages: [
+      //     { slug: 'authentication', title: 'Authentication' },
+      //     { slug: 'data-models', title: 'Data Models' },
+      //     { slug: 'error-handling', title: 'Error Handling' },
+      //   ],
+      // },
       'api': {
         title: 'API Reference',
         pages: [
           { slug: 'overview', title: 'Overview' },
-          { slug: 'rest-endpoints', title: 'REST Endpoints' },
-          { slug: 'webhooks', title: 'Webhooks' },
+          // { slug: 'rest-endpoints', title: 'REST Endpoints' },
+          // { slug: 'webhooks', title: 'Webhooks' },
         ],
       },
     },

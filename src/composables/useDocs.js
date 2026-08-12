@@ -10,20 +10,50 @@ export function useDocs() {
     return projectSlug ? projects[projectSlug] || null : null
   })
 
+  // Segments after the project slug, e.g. ['getting-started', 'bom-product', 'overview']
+  const segments = computed(() => route.params.pathMatch || [])
+
   const currentSection = computed(() => {
     const project = currentProject.value
-    if (!project || !route.params.section) return null
-    return project.sections[route.params.section] || null
+    if (!project || !segments.value[0]) return null
+    return project.sections[segments.value[0]] || null
+  })
+
+  // Walk the tree (section → page → child → …) to find the node the URL points to.
+  const currentPage = computed(() => {
+    const section = currentSection.value
+    if (!section) return null
+
+    let node = null
+    let items = section.pages
+    for (let i = 1; i < segments.value.length; i++) {
+      node = (items || []).find((p) => p.slug === segments.value[i])
+      if (!node) return null
+      items = node.children
+    }
+    return node
   })
 
   const projectList = computed(() => {
     return Object.entries(projects).map(([slug, data]) => ({ slug, ...data }))
   })
 
-  function getEditUrl(projectSlug, sectionSlug, pageSlug) {
+  // Content path for the current URL, e.g. /content/project-one/getting-started/bom-product/overview.md
+  function getContentPath(projectSlug, segs) {
+    if (!segs || segs.length === 0) return null
+    return `/content/${projectSlug}/${segs.join('/')}.md`
+  }
+
+  function getContentPathForSegments(segs) {
+    if (!route.params.project || !segs || segs.length === 0) return null
+    return `/content/${route.params.project}/${segs.join('/')}.md`
+  }
+
+  function getEditUrl(projectSlug, segs) {
     const project = projects[projectSlug]
     const repo = project?.repo || 'https://github.com/your-org'
-    return `${repo}/edit/main/docs/${sectionSlug}/${pageSlug}.md`
+    const path = (segs || []).join('/')
+    return `${repo}/edit/main/docs/${path}.md`
   }
 
   return {
@@ -31,6 +61,10 @@ export function useDocs() {
     projectList,
     currentProject,
     currentSection,
+    currentPage,
+    segments,
+    getContentPath,
+    getContentPathForSegments,
     getEditUrl,
   }
 }

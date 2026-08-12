@@ -6,20 +6,13 @@ const routes = [
     name: 'home',
     component: () => import('@/pages/index.vue'),
   },
-  // Dynamic documentation routes
+  // Catch-all for documentation — supports nested pages at any depth.
+  // pathMatch = array of segments after the project slug, e.g.
+  //   /project-one/getting-started/bom-product/overview
+  // → pathMatch: ['getting-started', 'bom-product', 'overview']
   {
-    path: '/:project',
+    path: '/:project/:pathMatch(.*)*',
     name: 'project',
-    component: () => import('@/pages/project/index.vue'),
-  },
-  {
-    path: '/:project/:section',
-    name: 'project-section',
-    component: () => import('@/pages/project/index.vue'),
-  },
-  {
-    path: '/:project/:section/:page',
-    name: 'project-page',
     component: () => import('@/pages/project/index.vue'),
   },
 ]

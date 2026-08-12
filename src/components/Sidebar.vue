@@ -44,20 +44,14 @@
             <p class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
               {{ section.title }}
             </p>
-            <div class="space-y-0.5">
-              <router-link
-                v-for="page in section.pages"
-                :key="page.slug"
-                :to="`/${project.slug}/${sectionSlug}/${page.slug}`"
-                class="sidebar-link"
-                :class="isPageActive(project.slug, sectionSlug, page.slug)
-                  ? 'sidebar-link-active'
-                  : 'sidebar-link-inactive'"
-                @click="$emit('navigate')"
-              >
-                {{ page.title }}
-              </router-link>
-            </div>
+            <!-- Recursive menu: renders pages + nested children at any depth -->
+            <SidebarMenu
+              :items="section.pages"
+              :base-path="`/${project.slug}/${sectionSlug}`"
+              :depth="1"
+              :segments="segments"
+              @navigate="$emit('navigate')"
+            />
           </div>
         </div>
       </div>
@@ -81,17 +75,17 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useDocs } from '@/composables/useDocs'
+import SidebarMenu from '@/components/SidebarMenu.vue'
 
 export default {
   name: 'AppSidebar',
+  components: { SidebarMenu },
   emits: ['navigate'],
   setup(props, { emit }) {
     const route = useRoute()
     const router = useRouter()
-    const { projectList } = useDocs()
+    const { projectList, segments } = useDocs()
 
-    // Expand the project matching the current URL on first load, otherwise the
-    // first project. After this, ONLY user clicks change the open/closed state.
     const initialSlug = route.params.project || projectList.value[0]?.slug
     const expandedProjects = ref(new Set(initialSlug ? [initialSlug] : []))
 
@@ -105,8 +99,6 @@ export default {
       return expandedProjects.value.has(projectSlug)
     }
 
-    // The ONLY thing that changes open/closed state is a user click. Navigation
-    // never touches this Set, so behavior is always predictable and consistent.
     function toggleProject(projectSlug) {
       const set = new Set(expandedProjects.value)
       const opening = !set.has(projectSlug)
@@ -116,21 +108,13 @@ export default {
         set.delete(projectSlug)
       }
       expandedProjects.value = set
-
-      // When opening a project we're not already viewing, go to its landing page.
       if (opening && route.params.project !== projectSlug) {
         router.push(`/${projectSlug}`)
       }
       emit('navigate')
     }
 
-    function isPageActive(projectSlug, sectionSlug, pageSlug) {
-      return route.params.project === projectSlug &&
-             route.params.section === sectionSlug &&
-             route.params.page === pageSlug
-    }
-
-    return { projectList, isProjectActive, isExpanded, toggleProject, isPageActive }
+    return { projectList, segments, isProjectActive, isExpanded, toggleProject }
   },
 }
 </script>

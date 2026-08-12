@@ -74,6 +74,9 @@
 
   .prose table {
     @apply w-full my-4 border-collapse;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .prose th {

@@ -62,22 +62,17 @@
 </template>
 
 <script>
-import { ref } from 'vue'
 import { useDocs } from '@/composables/useDocs'
+import { useTheme } from '@/composables/useTheme'
 
 export default {
   name: 'TopHeader',
   emits: ['toggle-sidebar'],
   setup() {
     const { currentProject, currentSection } = useDocs()
-    const isDark = ref(document.documentElement.classList.contains('dark'))
-
-    function toggleDark() {
-      isDark.value = !isDark.value
-      document.documentElement.classList.toggle('dark', isDark.value)
-    }
+    const { isDark, toggleDark } = useTheme()
 
     return { currentProject, currentSection, isDark, toggleDark }
   },
 }
-</script>
+</script>

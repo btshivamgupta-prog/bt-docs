@@ -23,7 +23,7 @@
 
       <!-- Page content -->
       <main class="flex-1 overflow-y-auto scrollbar-thin">
-        <div class="mx-auto max-w-4xl px-6 py-8 lg:px-8">
+        <div class="mx-auto max-w-7xl px-6 py-8 lg:px-8">
           <slot />
         </div>
       </main>
@@ -31,7 +31,7 @@
       <!-- Footer -->
       <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 px-6 py-4">
         <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-          <span>Copyright © {{ new Date().getFullYear() }}</span>
+          <span>Copyright ï¿½ {{ new Date().getFullYear() }}</span>
           <span>Built with Vue 3 + Vite</span>
         </div>
       </footer>
