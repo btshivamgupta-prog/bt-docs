@@ -33,12 +33,92 @@
     </div>
 
     <!-- Documentation content (only when a leaf page resolves) -->
-    <div v-else-if="!showLanding" class="prose" v-html="renderedContent"></div>
+    <div v-else-if="!showLanding">
+      <!-- Mobile / small-screen collapsible TOC -->
+      <details v-if="toc.length" class="lg:hidden mb-6 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+        <summary class="cursor-pointer text-sm font-semibold text-gray-700 dark:text-gray-300 select-none">
+          📑 On this page
+        </summary>
+        <ul class="mt-3 space-y-1.5 text-sm">
+          <li v-for="parent in tocTree" :key="parent.slug">
+            <a
+              :href="'#' + parent.slug"
+              class="block rounded px-1 py-0.5 font-medium text-gray-800 dark:text-gray-200 transition-colors"
+              :class="activeSlug === parent.slug
+                ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300'
+                : 'hover:text-primary-600 dark:hover:text-primary-400'"
+              @click.prevent="scrollToHeading(parent.slug)"
+            >{{ parent.text }}</a>
+            <ul v-if="parent.children.length" class="ml-3 mt-0.5 space-y-0.5 border-l border-gray-200 dark:border-gray-800 pl-2">
+              <li v-for="child in parent.children" :key="child.slug">
+                <a
+                  :href="'#' + child.slug"
+                  class="block rounded px-1 py-0.5 text-gray-500 dark:text-gray-400 transition-colors"
+                  :class="activeSlug === child.slug
+                    ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300'
+                    : 'hover:text-primary-600 dark:hover:text-primary-400'"
+                  @click.prevent="scrollToHeading(child.slug)"
+                >{{ child.text }}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </details>
+
+      <div class="flex items-start gap-10">
+        <!-- Article body -->
+        <div class="prose flex-1 min-w-0" v-html="renderedContent"></div>
+
+        <!-- Sticky table of contents (large screens) -->
+        <nav
+          v-if="toc.length"
+          class="hidden lg:block w-60 shrink-0 sticky top-8 self-start max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-thin pl-5 border-l border-gray-200 dark:border-gray-800"
+        >
+          <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+            On this page
+          </p>
+          <ul class="space-y-1 text-sm">
+            <li v-for="parent in tocTree" :key="parent.slug">
+              <a
+                :href="'#' + parent.slug"
+                class="block border-l-2 py-1 pl-3 transition-colors"
+                :class="{
+                  'border-primary-500 text-primary-600 dark:text-primary-400 font-semibold':
+                    activeSlug === parent.slug,
+                  'border-transparent text-gray-700 dark:text-gray-200 font-medium hover:text-primary-600 dark:hover:text-primary-400':
+                    activeSlug !== parent.slug,
+                }"
+                @click.prevent="scrollToHeading(parent.slug)"
+              >{{ parent.text }}</a>
+
+              <!-- H2 children of this H1 -->
+              <ul v-if="parent.children.length" class="mt-0.5 space-y-0.5">
+                <li v-for="child in parent.children" :key="child.slug">
+                  <a
+                    :href="'#' + child.slug"
+                    class="block py-0.5 pl-3 text-gray-500 dark:text-gray-400 transition-colors"
+                    :class="activeSlug === child.slug
+                      ? 'text-primary-600 dark:text-primary-400 font-semibold'
+                      : 'hover:text-primary-600 dark:hover:text-primary-400'"
+                    @click.prevent="scrollToHeading(child.slug)"
+                  >{{ child.text }}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
 
     <!-- Landing navigation (project / section / any parent node with children) -->
-    <div v-else class="mt-8 space-y-8">
-      <div v-for="group in landingGroups" :key="group.title">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">{{ group.title }}</h3>
+    <div v-else class="mt-8 space-y-10">
+      <div v-for="(group, gi) in landingGroups" :key="group.title">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="flex h-6 w-6 items-center justify-center rounded-md bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 text-xs font-bold">
+            {{ showAllSections ? gi + 1 : '▸' }}
+          </span>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ group.title }}</h3>
+        </div>
         <PageCards :items="group.items" :base-path="group.basePath" />
       </div>
     </div>
@@ -57,7 +137,7 @@
   </div>
 </template>
 <script>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDocs } from '@/composables/useDocs'
 import PageCards from '@/components/PageCards.vue'
@@ -71,6 +151,8 @@ export default {
     const { currentProject, currentSection, currentPage, segments, getEditUrl } = useDocs()
     const pageContent = ref(null)
     const loading = ref(false)
+    const toc = ref([])
+    const activeSlug = ref(null)
 
     const editUrl = computed(() => {
       if (!route.params.project) return '#'
@@ -81,8 +163,6 @@ export default {
       if (!pageContent.value) return ''
       return renderMarkdown(pageContent.value)
     })
-
-    // Landing is shown when: project landing, section landing, or a parent node with children.
     const showLanding = computed(() => {
       const page = currentPage.value
       const segs = segments.value
@@ -92,11 +172,13 @@ export default {
       return false
     })
 
+    // True when the landing page lists every section of the project
+    const showAllSections = computed(() => segments.value.length === 0)
+
     const landingGroups = computed(() => {
       const project = currentProject.value
       const segs = segments.value
       if (!project) return []
-
       // Project landing: show every section, each with its pages
       if (segs.length === 0) {
         return Object.entries(project.sections).map(([slug, s]) => ({
@@ -163,15 +245,111 @@ This section provides detailed information about ${title.toLowerCase()}. Content
     }
 
     function renderMarkdown(md) {
-      // Use the marked parser for correct rendering of tables, blockquotes,
-      // nested lists, code blocks, headings, etc.
-      return marked.parse(md, {
+      // Build an id per heading so anchor links / TOC work.
+      const tocEntries = []
+      const usedSlugs = new Set()
+      const renderer = new marked.Renderer()
+
+      renderer.heading = function (textOrToken, level) {
+        const text = typeof textOrToken === 'string'
+          ? textOrToken
+          : String((textOrToken && textOrToken.text) || '')
+        const depth = typeof level === 'number' ? level : (textOrToken && textOrToken.depth) || 1
+        const slug = slugify(text, usedSlugs)
+        tocEntries.push({ depth, text, slug })
+        const anchor = `<a class="toc-anchor" href="#${slug}" aria-hidden="true" tabindex="-1">#</a>`
+        return `<h${depth} id="${slug}">${text}${anchor}</h${depth}>`
+      }
+
+      const html = marked.parse(md, {
         gfm: true,
+        renderer,
       })
+
+      // Save the TOC for this page (reactive) — keeps ALL levels for anchors & scroll-spy
+      toc.value = tocEntries
+      return html
+    }
+
+    // TOC for display: only H1 as top-level items, with H2 nested under the
+    // H1 that precedes them. H3+ are excluded from the index.
+    const tocTree = computed(() => {
+      const tree = []
+      let current = null
+      for (const item of toc.value) {
+        if (item.depth === 1) {
+          current = { ...item, children: [] }
+          tree.push(current)
+        } else if (item.depth === 2 && current) {
+          current.children.push(item)
+        }
+        // depth > 2 is intentionally ignored in the sidebar index
+      }
+      return tree
+    })
+
+    function slugify(text, used) {
+      const clean = text
+        .replace(/`/g, '')                 // remove inline-code backticks
+        .replace(/<[^>]+>/g, '')          // remove any html tags
+      let base = clean
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+      if (!base) base = 'section'
+      let slug = base
+      let i = 2
+      while (used.has(slug)) {
+        slug = `${base}-${i}`
+        i++
+      }
+      used.add(slug)
+      return slug
     }
 
     onMounted(() => fetchContent())
     watch(() => route.fullPath, () => fetchContent())
+
+    // ── Scroll-spy: highlight the TOC item for the section currently in view ──
+    let observer = null
+
+    function setupScrollSpy() {
+      const article = document.querySelector('.prose')
+      if (!observer && article) {
+        observer = new IntersectionObserver(
+          (entries) => {
+            // Pick the entry that is nearest the top of the viewport.
+            const visible = entries
+              .filter((e) => e.isIntersecting)
+              .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
+            if (visible) activeSlug.value = visible.target.id
+          },
+          { root: null, rootMargin: '-15% 0px -70% 0px', threshold: 0 }
+        )
+      }
+      // Observe the rendered headings
+      document.querySelectorAll('.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6')
+        .forEach((el) => observer && observer.observe(el))
+    }
+
+    // Re-run scroll-spy whenever new content is rendered
+    watch(renderedContent, async () => {
+      await nextTick()
+      setupScrollSpy()
+    })
+
+    onUnmounted(() => {
+      if (observer) observer.disconnect()
+    })
+
+    // Manually scroll to a heading. Used by TOC links to avoid the conflict
+    // between native hash-jump and the router (which garbles the first click).
+    function scrollToHeading(slug) {
+      const el = document.getElementById(slug)
+      if (!el) return
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
 
     return {
       currentProject,
@@ -182,6 +360,11 @@ This section provides detailed information about ${title.toLowerCase()}. Content
       renderedContent,
       showLanding,
       landingGroups,
+      showAllSections,
+      toc,
+      tocTree,
+      activeSlug,
+      scrollToHeading,
     }
   },
 }

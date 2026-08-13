@@ -19,7 +19,7 @@ The document re-explains the same concepts in plain words first, then in technic
 
 ---
 
-## 1. What is a BOM Product? (Plain English)
+## 1. What is a BOM Product? 
 
 Think of a **BOM product** as an **assembled item** made from several smaller parts.
 
