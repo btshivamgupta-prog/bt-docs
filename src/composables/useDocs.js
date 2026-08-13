@@ -42,6 +42,32 @@ export function useDocs() {
     return Object.entries(projects).map(([slug, data]) => ({ slug, ...data }))
   })
 
+  // Flatten every page (at any depth) across all projects for global search.
+  // Each entry: { path: [section, page, child...], fullPath, title, project, sectionTitle }
+  const allPages = computed(() => {
+    const list = []
+    for (const [slug, data] of Object.entries(projects)) {
+      for (const [secSlug, section] of Object.entries(data.sections)) {
+        const walk = (pages, path) => {
+          for (const p of pages) {
+            const pth = [...path, p.slug]
+            list.push({
+              path: pth,
+              fullPath: `/${slug}/${pth.join('/')}`,
+              title: p.title,
+              project: slug,
+              projectName: data.name,
+              sectionTitle: section.title,
+            })
+            if (p.children && p.children.length) walk(p.children, pth)
+          }
+        }
+        walk(section.pages, [secSlug])
+      }
+    }
+    return list
+  })
+
   // Content path for the current URL, e.g. /content/project-one/getting-started/bom-product/overview.md
   function getContentPath(projectSlug, segs) {
     if (!segs || segs.length === 0) return null
@@ -67,6 +93,7 @@ export function useDocs() {
     currentSection,
     currentPage,
     segments,
+    allPages,
     getContentPath,
     getContentPathForSegments,
     getEditUrl,
