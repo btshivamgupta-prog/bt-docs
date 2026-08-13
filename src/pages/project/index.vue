@@ -140,6 +140,7 @@
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDocs } from '@/composables/useDocs'
+import { useViewMode } from '@/composables/useViewMode'
 import PageCards from '@/components/PageCards.vue'
 import { marked } from 'marked'
 
@@ -149,6 +150,7 @@ export default {
   setup() {
     const route = useRoute()
     const { currentProject, currentSection, currentPage, segments, getEditUrl } = useDocs()
+    const { mode } = useViewMode()
     const pageContent = ref(null)
     const loading = ref(false)
     const toc = ref([])
@@ -156,7 +158,10 @@ export default {
 
     const editUrl = computed(() => {
       if (!route.params.project) return '#'
-      return getEditUrl(route.params.project, segments.value)
+      const segs = mode.value === 'requirements'
+        ? ['requirements', ...segments.value]
+        : segments.value
+      return getEditUrl(route.params.project, segs)
     })
 
     const renderedContent = computed(() => {
@@ -215,21 +220,50 @@ export default {
 
       loading.value = true
       try {
-        const url = `/content/${project}/${segs.join('/')}.md`
+        // Docs live at /content/{project}/... ; requirements at /content/requirements/{project}/...
+        const isReq = mode.value === 'requirements'
+        const url = isReq
+          ? `/content/requirements/${project}/${segs.join('/')}.md`
+          : `/content/${project}/${segs.join('/')}.md`
         const response = await fetch(url)
         if (response.ok) {
           pageContent.value = await response.text()
         } else {
-          pageContent.value = generatePlaceholderContent(project, segs)
+          pageContent.value = isReq
+            ? generateRequirementsPlaceholder(project, segs)
+            : generatePlaceholderContent(project, segs)
         }
       } catch {
-        pageContent.value = generatePlaceholderContent(project, segs)
+        const isReq = mode.value === 'requirements'
+        pageContent.value = isReq
+          ? generateRequirementsPlaceholder(project, segs)
+          : generatePlaceholderContent(project, segs)
       } finally {
         loading.value = false
       }
     }
 
-    function generatePlaceholderContent(project, segs) {
+    function generateRequirementsPlaceholder(project, segs) {
+      const leaf = segs[segs.length - 1]
+      const title = leaf.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+      const fileRef = 'content/requirements/' + project + '/' + segs.join('/') + '.md'
+      return [
+        '# ' + title + ' \u2014 Requirements',
+        '',
+        'No requirement document has been added for this page yet.',
+        '',
+        '> Add a requirement file at ' + fileRef + ' to edit this page.',
+        '',
+        '## Suggested structure',
+        '',
+        '- **Objective** \u2014 what this requirement aims to achieve.',
+        '- **Stakeholders** \u2014 who is affected.',
+        '- **Acceptance criteria** \u2014 how to verify it is met.',
+        '',
+      ].join('\n')
+    }
+
+        function generatePlaceholderContent(project, segs) {
       const leaf = segs[segs.length - 1]
       const title = leaf.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
       return `# ${title}

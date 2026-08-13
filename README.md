@@ -4,6 +4,8 @@ A scalable, content-driven **documentation site** built with **Vue 3 + Vite**. I
 
 > **New developer?** Read [HOW_TO_ADD_PROJECT.md](./HOW_TO_ADD_PROJECT.md) to learn how to add content and new projects.
 
+> **Writing requirements?** See [HOW_TO_ADD_REQUIREMENTS.md](./HOW_TO_ADD_REQUIREMENTS.md) for how any user can add requirement documents for each page (Docs / Requirement toggle).
+
 ---
 
 ## ✨ Features
