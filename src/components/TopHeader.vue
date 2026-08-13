@@ -33,6 +33,24 @@
 
     <!-- Right side actions -->
     <div class="flex items-center gap-1">
+      <!-- Docs / Requirement toggle -->
+      <div class="hidden md:flex items-center rounded-lg p-0.5 border border-gray-200 dark:border-gray-700 mr-1">
+        <button
+          class="px-2.5 py-1 rounded-md text-xs font-semibold transition-colors"
+          :class="mode === 'docs'
+            ? 'bg-primary-600 text-white'
+            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'"
+          @click="setMode('docs')"
+        >Docs</button>
+        <button
+          class="px-2.5 py-1 rounded-md text-xs font-semibold transition-colors"
+          :class="mode === 'requirements'
+            ? 'bg-primary-600 text-white'
+            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'"
+          @click="setMode('requirements')"
+        >Requirement</button>
+      </div>
+
       <!-- Search placeholder -->
       <button
         class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-md text-sm text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors min-w-[200px]"
@@ -64,6 +82,7 @@
 <script>
 import { useDocs } from '@/composables/useDocs'
 import { useTheme } from '@/composables/useTheme'
+import { useViewMode } from '@/composables/useViewMode'
 
 export default {
   name: 'TopHeader',
@@ -71,8 +90,9 @@ export default {
   setup() {
     const { currentProject, currentSection } = useDocs()
     const { isDark, toggleDark } = useTheme()
+    const { mode, setMode } = useViewMode()
 
-    return { currentProject, currentSection, isDark, toggleDark }
+    return { currentProject, currentSection, isDark, toggleDark, mode, setMode }
   },
 }
 </script>
