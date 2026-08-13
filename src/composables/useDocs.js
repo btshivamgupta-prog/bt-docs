@@ -7,7 +7,11 @@ export function useDocs() {
 
   const currentProject = computed(() => {
     const projectSlug = route.params.project
-    return projectSlug ? projects[projectSlug] || null : null
+    if (!projectSlug) return null
+    const data = projects[projectSlug]
+    if (!data) return null
+    // Include the slug so components can build links like /{slug}/section
+    return { ...data, slug: projectSlug }
   })
 
   // Segments after the project slug, e.g. ['getting-started', 'bom-product', 'overview']

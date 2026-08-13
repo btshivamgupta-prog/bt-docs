@@ -36,6 +36,24 @@
     @apply text-lg font-medium text-gray-900 dark:text-white mt-6 mb-2;
   }
 
+  /* Keep section headings clear of the sticky header when jumping via TOC */
+  .prose :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 5rem;
+  }
+
+  /* "Copy link" anchor shown next to each heading */
+  .prose .toc-anchor {
+    @apply ml-2 text-gray-300 dark:text-gray-600 no-underline align-middle text-lg font-normal;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .prose :is(h1, h2, h3, h4, h5, h6):hover .toc-anchor {
+    opacity: 1;
+  }
+  .prose .toc-anchor:hover {
+    @apply text-primary-500;
+  }
+
   .prose p {
     @apply my-4 leading-7;
   }

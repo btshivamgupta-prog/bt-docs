@@ -36,7 +36,7 @@ export const projects = {
   // ── Project 1 ──────────────────────────────────────────────────────────────
   'rokko': {
     name: 'ROKKO',
-    description: 'A powerful backend service for handling API requests with ease.',
+    description: 'A powerful FSM Tool.',
     icon: '🚀',
     repo: 'https://github.com/your-org/project-one',
     sections: {
@@ -60,7 +60,8 @@ export const projects = {
               { slug: 'overview', title: 'BOM Product',
                 children: [
                   { slug: 'bom-intro', title: 'Overview' },
-                  { slug: 'finished-unit', title: 'Finisehd Unit' },
+                  { slug: 'bom-flow', title: 'BOM Flow' },
+                  { slug: 'finished-unit', title: 'Finished Unit' },
                 ],
                },
             ],
