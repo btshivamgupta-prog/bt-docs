@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -127,7 +127,32 @@
     @apply bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium;
   }
 
-  .sidebar-link-inactive {
+  
+  /* Page transition (fade + slight slide) */
+  .page-enter-active,
+  .page-leave-active {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+  .page-enter-from {
+    opacity: 0; transform: translateY(8px);
+  }
+  .page-leave-to {
+    opacity: 0; transform: translateY(-8px);
+  }
+
+  /* Generic fade (back-to-top) */
+  .fade-enter-active,
+  .fade-leave-active { transition: opacity 0.2s ease; }
+  .fade-enter-from,
+  .fade-leave-to { opacity: 0; }
+
+  /* Search palette */
+  .palette-enter-active,
+  .palette-leave-active { transition: opacity 0.16s ease; }
+  .palette-enter-from,
+  .palette-leave-to { opacity: 0; }
+
+.sidebar-link-inactive {
     @apply text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800;
   }
 
@@ -157,3 +182,49 @@
     background-color: #4b5563;
   }
 }
+/* Code block wrapper with copy button */
+.prose .code-block {
+  position: relative;
+}
+.prose .copy-code-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2rem;
+  color: #d1d5db;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.prose .code-block:hover .copy-code-btn {
+  opacity: 1;
+}
+.prose .copy-code-btn:hover {
+  background: rgba(255,255,255,0.18);
+}
+.prose .code-block pre {
+  padding-top: 2.5rem;
+}
+
+/* highlight.js theme (GitHub Dark-ish) for highlighted code */
+.prose pre code.hljs {
+  color: #e6edf3;
+  background: transparent;
+}
+.hljs-comment, .hljs-quote { color: #8b949e; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal { color: #ff7b72; }
+.hljs-name, .hljs-title, .hljs-section, .hljs-attribute { color: #d2a8ff; }
+.hljs-string, .hljs-attr { color: #a5d6ff; }
+.hljs-number, .hljs-symbol, .hljs-bullet { color: #79c0ff; }
+.hljs-built_in, .hljs-type { color: #79c0ff; }
+.hljs-variable, .hljs-template-variable { color: #ffa657; }
+.hljs-function .hljs-title { color: #d2a8ff; }
+.hljs-meta { color: #8b949e; }

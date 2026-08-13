@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <!-- Project header -->
     <div v-if="currentProject" class="mb-10">
@@ -21,14 +21,14 @@
 
     <!-- Not found -->
     <div v-else-if="!currentProject" class="py-12 text-center">
-      <div class="text-6xl mb-4">📄</div>
+      <div class="text-6xl mb-4">ðŸ“„</div>
       <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Project Not Found</h2>
       <p class="text-gray-600 dark:text-gray-400 mb-6">The project you are looking for does not exist.</p>
       <router-link
         to="/"
         class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
       >
-        ← Back to Home
+        â† Back to Home
       </router-link>
     </div>
 
@@ -37,7 +37,7 @@
       <!-- Mobile / small-screen collapsible TOC -->
       <details v-if="toc.length" class="lg:hidden mb-6 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
         <summary class="cursor-pointer text-sm font-semibold text-gray-700 dark:text-gray-300 select-none">
-          📑 On this page
+          ðŸ“‘ On this page
         </summary>
         <ul class="mt-3 space-y-1.5 text-sm">
           <li v-for="parent in tocTree" :key="parent.slug">
@@ -115,7 +115,7 @@
       <div v-for="(group, gi) in landingGroups" :key="group.title">
         <div class="flex items-center gap-2 mb-4">
           <span class="flex h-6 w-6 items-center justify-center rounded-md bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 text-xs font-bold">
-            {{ showAllSections ? gi + 1 : '▸' }}
+            {{ showAllSections ? gi + 1 : 'â–¸' }}
           </span>
           <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ group.title }}</h3>
         </div>
@@ -143,6 +143,17 @@ import { useDocs } from '@/composables/useDocs'
 import { useViewMode } from '@/composables/useViewMode'
 import PageCards from '@/components/PageCards.vue'
 import { marked } from 'marked'
+import hljs from 'highlight.js/lib/common'
+
+// Escape HTML entities for embedding in code blocks
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
 
 export default {
   name: 'ProjectDocPage',
@@ -295,12 +306,27 @@ This section provides detailed information about ${title.toLowerCase()}. Content
         return `<h${depth} id="${slug}">${text}${anchor}</h${depth}>`
       }
 
-      const html = marked.parse(md, {
+renderer.code = function (code, infostring) {
+        const lang = (infostring || '').match(/\S*/)[0]
+        let highlighted
+        const useLang = lang && hljs.getLanguage(lang)
+        try {
+          highlighted = useLang
+            ? hljs.highlight(code, { language: lang }).value
+            : hljs.highlightAuto(code).value
+        } catch {
+          highlighted = escapeHtml(code)
+        }
+        return '<div class="code-block">' +
+          '<button type="button" class="copy-code-btn" aria-label="Copy code">Copy</button>' +
+          '<pre><code class="hljs' + (useLang ? ' language-' + lang : '') + '">' + highlighted + '</code></pre></div>'
+      }
+          const html = marked.parse(md, {
         gfm: true,
         renderer,
       })
 
-      // Save the TOC for this page (reactive) — keeps ALL levels for anchors & scroll-spy
+      // Save the TOC for this page (reactive) â€” keeps ALL levels for anchors & scroll-spy
       toc.value = tocEntries
       return html
     }
@@ -342,10 +368,36 @@ This section provides detailed information about ${title.toLowerCase()}. Content
       return slug
     }
 
+    // Delegate clicks on ".copy-code-btn" to copy the sibling <code> text
+    function handleCopyClick(e) {
+      const btn = e.target && e.target.closest ? e.target.closest('.copy-code-btn') : null
+      if (!btn) return
+      const codeEl = btn.parentElement && btn.parentElement.querySelector('code')
+      if (!codeEl) return
+      const text = codeEl.innerText || codeEl.textContent || ''
+      const done = () => {
+        btn.textContent = 'Copied!'
+        setTimeout(() => { btn.textContent = 'Copy' }, 1500)
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(done)
+      } else {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea')
+        ta.value = text
+        document.body.appendChild(ta)
+        ta.select()
+        try { document.execCommand('copy') } catch (err) {}
+        document.body.removeChild(ta)
+        done()
+      }
+    }
+
+    document.addEventListener('click', handleCopyClick)
     onMounted(() => fetchContent())
     watch(() => route.fullPath, () => fetchContent())
 
-    // ── Scroll-spy: highlight the TOC item for the section currently in view ──
+    // â”€â”€ Scroll-spy: highlight the TOC item for the section currently in view â”€â”€
     let observer = null
 
     function setupScrollSpy() {
@@ -375,6 +427,8 @@ This section provides detailed information about ${title.toLowerCase()}. Content
 
     onUnmounted(() => {
       if (observer) observer.disconnect()
+
+      document.removeEventListener('click', handleCopyClick)
     })
 
     // Manually scroll to a heading. Used by TOC links to avoid the conflict
