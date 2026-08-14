@@ -33,7 +33,26 @@
 
 export const projects = {
 
+
+  
+
   // ── Project 1 ──────────────────────────────────────────────────────────────
+  'plasma': {
+    name: 'Plasma FSM',
+    description: 'A Powerful FSM Tool for Plasma.',
+    icon: '🛠️',
+    repo: 'https://github.com/your-org/project-two',
+    sections: {
+      'getting-started': {
+        title: 'Getting Started',
+        pages: [
+          { slug: 'introduction', title: 'Introduction' },
+          { slug: 'product-stock-management', title: 'Product Stock Management' },
+        ],
+      },
+    },
+  },
+  // ── Project 2 ──────────────────────────────────────────────────────────────
   'rokko': {
     name: 'ROKKO',
     description: 'A powerful FSM Tool.',
@@ -78,31 +97,14 @@ export const projects = {
       //     { slug: 'error-handling', title: 'Error Handling' },
       //   ],
       // },
-      'api': {
-        title: 'API Reference',
-        pages: [
-          { slug: 'overview', title: 'Overview' },
-          // { slug: 'rest-endpoints', title: 'REST Endpoints' },
-          // { slug: 'webhooks', title: 'Webhooks' },
-        ],
-      },
-    },
-  },
-
-  // ── Project 2 ──────────────────────────────────────────────────────────────
-  'plasma': {
-    name: 'Plasma FSM',
-    description: 'A Powerful FSM Tool for Plasma.',
-    icon: '🛠️',
-    repo: 'https://github.com/your-org/project-two',
-    sections: {
-      'getting-started': {
-        title: 'Getting Started',
-        pages: [
-          { slug: 'introduction', title: 'Introduction' },
-          { slug: 'product-stock-management', title: 'Product Stock Management' },
-        ],
-      },
+      // 'api': {
+      //   title: 'API Reference',
+      //   pages: [
+      //     { slug: 'overview', title: 'Overview' },
+      //     // { slug: 'rest-endpoints', title: 'REST Endpoints' },
+      //     // { slug: 'webhooks', title: 'Webhooks' },
+      //   ],
+      // },
     },
   },
 
