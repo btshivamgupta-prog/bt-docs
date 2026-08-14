@@ -8,7 +8,7 @@
         <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
           BT
         </div>
-        <span class="font-semibold text-gray-900 dark:text-white">BT Docs</span>
+        <span class="font-semibold text-gray-900 dark:text-white">Business Thrust Docs</span>
       </router-link>
     </div>
 

@@ -90,18 +90,17 @@ export const projects = {
   },
 
   // ── Project 2 ──────────────────────────────────────────────────────────────
-  'project-two': {
-    name: 'Project Two',
-    description: 'A frontend component library for building modern user interfaces.',
-    icon: '🎨',
+  'plasma': {
+    name: 'Plasma FSM',
+    description: 'A Powerful FSM Tool for Plasma.',
+    icon: '🛠️',
     repo: 'https://github.com/your-org/project-two',
     sections: {
       'getting-started': {
         title: 'Getting Started',
         pages: [
           { slug: 'introduction', title: 'Introduction' },
-          { slug: 'installation', title: 'Installation' },
-          { slug: 'theming', title: 'Theming' },
+          { slug: 'product-stock-management', title: 'Product Stock Management' },
         ],
       },
     },

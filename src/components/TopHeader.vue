@@ -63,6 +63,57 @@
         <kbd class="ml-auto text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">/</kbd>
       </button>
 
+
+      <!-- Accent color picker -->
+      <div ref="accentWrap" class="relative">
+        <button
+          class="flex items-center gap-1.5 p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+          @click="accentOpen = !accentOpen"
+          :aria-label="'Accent color: ' + currentAccent.name"
+          :title="'Accent color: ' + currentAccent.name"
+        >
+          <span
+            class="w-4 h-4 rounded-full ring-2 ring-offset-2 ring-offset-white dark:ring-offset-gray-950 ring-gray-200 dark:ring-gray-700"
+            :style="{ backgroundColor: currentAccent.swatch }"
+          ></span>
+          <svg
+            class="w-3.5 h-3.5 transition-transform"
+            :class="accentOpen ? 'rotate-180' : ''"
+            fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <Transition name="fade">
+          <div
+            v-if="accentOpen"
+            class="absolute right-0 mt-2 w-48 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl p-1.5 z-50"
+          >
+            <p class="px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+              Accent color
+            </p>
+            <button
+              v-for="a in accents"
+              :key="a.id"
+              class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-colors"
+              :class="accent === a.id ? 'bg-primary-50 dark:bg-primary-950/60' : 'hover:bg-gray-50 dark:hover:bg-gray-800/60'"
+              @click="chooseAccent(a.id)"
+            >
+              <span class="w-4 h-4 rounded-full shrink-0" :style="{ backgroundColor: a.swatch }"></span>
+              <span class="flex-1 text-left text-gray-700 dark:text-gray-200">{{ a.name }}</span>
+              <svg
+                v-if="accent === a.id"
+                class="w-4 h-4 text-primary-600"
+                fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+            </button>
+          </div>
+        </Transition>
+      </div>
+
       <!-- Dark mode toggle -->
       <button
         class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -81,10 +132,12 @@
 </template>
 
 <script>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useDocs } from '@/composables/useDocs'
 import { useTheme } from '@/composables/useTheme'
 import { useViewMode } from '@/composables/useViewMode'
 import { useSearchPalette } from '@/composables/useSearchPalette'
+import { useAccentColor } from '@/composables/useAccentColor'
 
 export default {
   name: 'TopHeader',
@@ -94,8 +147,42 @@ export default {
     const { isDark, toggleDark } = useTheme()
     const { mode, setMode } = useViewMode()
     const { openPalette } = useSearchPalette()
+    const { accent, currentAccent, setAccent, accents } = useAccentColor()
 
-    return { currentProject, currentSection, isDark, toggleDark, mode, setMode, openPalette }
+    // Accent color picker dropdown state + click-outside handling
+    const accentOpen = ref(false)
+    const accentWrap = ref(null)
+
+    function chooseAccent(id) {
+      setAccent(id)
+      accentOpen.value = false
+    }
+
+    function onDocClick(e) {
+      if (accentWrap.value && !accentWrap.value.contains(e.target)) {
+        accentOpen.value = false
+      }
+    }
+
+    onMounted(() => document.addEventListener('click', onDocClick))
+    onUnmounted(() => document.removeEventListener('click', onDocClick))
+
+    return {
+      currentProject,
+      currentSection,
+      isDark,
+      toggleDark,
+      mode,
+      setMode,
+      openPalette,
+      accent,
+      currentAccent,
+      accents,
+      accentOpen,
+      accentWrap,
+      chooseAccent,
+    }
   },
 }
-</script>
+</script>
+
