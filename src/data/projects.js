@@ -36,7 +36,7 @@ export const projects = {
 
   
 
-  // ── Project 1 ──────────────────────────────────────────────────────────────
+  // ── Plasma FSM ──────────────────────────────────────────────────────────────
   'plasma': {
     name: 'Plasma FSM',
     description: 'A Powerful FSM Tool for Plasma.',
@@ -47,7 +47,19 @@ export const projects = {
         title: 'Getting Started',
         pages: [
           { slug: 'introduction', title: 'Introduction' },
-          { slug: 'product-stock-management', title: 'Product Stock Management' },
+        ],
+      },
+      'product-stock-management': {
+        title: 'Product Stock Management',
+        pages: [
+          { slug: 'overview', title: 'Overview' },
+          { slug: 'stock-columns', title: 'Stock Columns' },
+          { slug: 'stock-helpers', title: 'Stock Helper Methods' },
+          { slug: 'visit-job-lifecycle', title: 'Visit / Job Lifecycle' },
+          { slug: 'serialized-products', title: 'Serialized Products' },
+          { slug: 'stock-adjustments', title: 'Stock Adjustments' },
+          { slug: 'audit-trail', title: 'Audit Trail' },
+          { slug: 'rules-for-developers', title: 'Rules for Developers' },
         ],
       },
     },

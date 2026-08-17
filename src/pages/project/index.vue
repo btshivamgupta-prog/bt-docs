@@ -296,9 +296,10 @@ This section provides detailed information about ${title.toLowerCase()}. Content
       const renderer = new marked.Renderer()
 
       renderer.heading = function (textOrToken, level) {
-        const text = typeof textOrToken === 'string'
+        const text = (typeof textOrToken === 'string'
           ? textOrToken
           : String((textOrToken && textOrToken.text) || '')
+        ).replace(/<[^>]+>/g, '')          // strip HTML tags (e.g. <code>) for clean TOC
         const depth = typeof level === 'number' ? level : (textOrToken && textOrToken.depth) || 1
         const slug = slugify(text, usedSlugs)
         tocEntries.push({ depth, text, slug })
