@@ -92,7 +92,7 @@ export const projects = {
                 children: [
                   { slug: 'bom-intro', title: 'Overview' },
                   { slug: 'bom-flow', title: 'BOM Flow' },
-                  { slug: 'finished-unit', title: 'Finished Unit' },
+                  { slug: 'finished-unit', title: 'Finished Unit Component Management' },
                 ],
                },
             ],
