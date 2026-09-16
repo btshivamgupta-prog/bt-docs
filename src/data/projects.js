@@ -97,6 +97,22 @@ export const projects = {
                },
             ],
           },
+          {
+            slug: 'customer-assets',
+            title: 'Customer Assets',
+            children: [
+              { slug: 'overview', title: 'Overview' },
+              { slug: 'flow', title: 'End-to-End Flow' },
+              { slug: 'identical-bom-flow', title: 'Identical BOM Flow' },
+              { slug: 'backend-architecture', title: 'Backend Architecture' },
+              { slug: 'database-tables', title: 'Database Tables' },
+              { slug: 'frontend-components', title: 'Frontend & Components' },
+              {
+                slug: 'cross-module-impact',
+                title: 'Cross-Module Impact & Inventory',
+              },
+            ],
+          },
           // { slug: 'installation', title: 'Installation' },
           // { slug: 'quick-start', title: 'Quick Start' },
         ],
