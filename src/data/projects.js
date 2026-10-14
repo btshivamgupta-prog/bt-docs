@@ -64,7 +64,37 @@ export const projects = {
       },
     },
   },
-  // ── Project 2 ──────────────────────────────────────────────────────────────
+  // ── Econpile ──────────────────────────────────────────────────────────────
+  'econpile': {
+    name: 'Econpile',
+    description: 'FSM platform — the QR-scan Public Service Portal that lets anyone on site report a fault or fill an asset inspection checklist from a phone, with no login.',
+    icon: '📱',
+    sections: {
+      'getting-started': {
+        title: 'Getting Started',
+        pages: [
+          { slug: 'introduction', title: 'Introduction' },
+        ],
+      },
+      'qr-scan-portal': {
+        title: 'QR Scan → Public Portal',
+        pages: [
+          { slug: 'overview', title: 'Overview' },
+          { slug: 'qr-codes', title: 'QR Codes & URLs' },
+          { slug: 'public-portal', title: 'Public Portal (Frontend)' },
+          { slug: 'checklist-definitions', title: 'Checklist Definitions & JSON Seeder' },
+          { slug: 'settings', title: 'Settings (Admin)' },
+          { slug: 'submissions', title: 'Submissions & Database' },
+          { slug: 'api-reference', title: 'API Reference' },
+          { slug: 'reports', title: 'Reports' },
+          { slug: 'security-and-rate-limits', title: 'Security & Rate Limits' },
+          { slug: 'troubleshooting', title: 'Troubleshooting' },
+        ],
+      },
+    },
+  },
+
+  // ── ROKKO ─────────────────────────────────────────────────────────────────
   'rokko': {
     name: 'ROKKO',
     description: 'A powerful FSM Tool.',
