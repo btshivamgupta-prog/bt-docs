@@ -91,6 +91,15 @@ export const projects = {
           { slug: 'troubleshooting', title: 'Troubleshooting' },
         ],
       },
+      'maintenance-cost': {
+        title: 'Asset Maintenance Cost',
+        pages: [
+          { slug: 'overview', title: 'Overview' },
+          { slug: 'calculation', title: 'How the Numbers Are Calculated' },
+          { slug: 'worked-examples', title: 'Worked Examples' },
+          { slug: 'api-and-integration', title: 'API & Integration' },
+        ],
+      },
     },
   },
 

@@ -7,8 +7,11 @@ Econpile is a field-service management (FSM) platform: customers, assets, rental
 visits/jobs, quotations, invoices, and so on. The backend is **Laravel** (API + SPA
 frontend in the same repo) and the frontend is **Vue 2 + Vuetify 2**.
 
-This documentation covers one feature in depth: the **Public Service Portal** — the
-login-free page that opens when somebody scans the QR sticker on a machine.
+This documentation covers two features in depth:
+
+1. the **Public Service Portal** — the login-free page that opens when somebody scans the QR
+   sticker on a machine; and
+2. the **Asset Maintenance Cost** view — how much of each visit's money belongs to a given asset.
 
 ---
 
@@ -46,9 +49,17 @@ Both paths write to the database and surface in the admin **Asset Checklist Repo
 
 ## Read next
 
+**QR Scan → Public Portal**
+
 - [QR Scan → Public Portal — Overview](/econpile/qr-scan-portal/overview) — the full picture, indexed.
 - [QR Codes & URLs](/econpile/qr-scan-portal/qr-codes) — what the sticker actually encodes.
 - [Public Portal (Frontend)](/econpile/qr-scan-portal/public-portal) — the two forms, field by field.
+
+**Asset Maintenance Cost**
+
+- [Asset Maintenance Cost — Overview](/econpile/maintenance-cost/overview) — where the tab is
+  (`asset-equipment/detail`), and what each column means.
+- [How the Numbers Are Calculated](/econpile/maintenance-cost/calculation) — the seven steps.
 
 ---
 
