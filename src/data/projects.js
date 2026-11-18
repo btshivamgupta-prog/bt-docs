@@ -33,7 +33,7 @@
 
 export const projects = {
   'cmworkz': {
-    name: 'CM Werkz (Tnine)',
+    name: 'CM Werkz',
     description: 'Field-service operations platform with transformer oil sampling, analysis, and PDF reporting.',
     icon: '⚡',
     sections: {
