@@ -111,6 +111,11 @@ export const projects = {
           ] },
           { slug: 'warranty', title: 'Warranty' },
           { slug: 'delivery', title: 'Delivery', children: [
+            {
+              slug: 'delivery-module-rental-conversion',
+              title: 'Overview & Rental Conversion',
+              contentSegments: ['delivery-module', 'delivery'],
+            },
             { slug: 'incoming', title: 'Incoming' },
             { slug: 'outgoing', title: 'Outgoing' },
             { slug: 'transfer', title: 'Transfer' },

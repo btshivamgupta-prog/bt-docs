@@ -72,8 +72,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useDocs } from '@/composables/useDocs'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 
@@ -81,13 +81,24 @@ export default {
   name: 'AppSidebar',
   components: { SidebarMenu },
   emits: ['navigate'],
-  setup(props, { emit }) {
+  setup() {
     const route = useRoute()
-    const router = useRouter()
     const { projectList, segments } = useDocs()
 
     const initialSlug = route.params.project || projectList.value[0]?.slug
     const expandedProjects = ref(new Set(initialSlug ? [initialSlug] : []))
+
+    // The sidebar is an accordion at the project level. Navigation can happen
+    // through links, search, or the browser history, so keep its open state in
+    // sync with the project currently shown by the router.
+    watch(
+      () => route.params.project,
+      (projectSlug) => {
+        if (projectSlug) {
+          expandedProjects.value = new Set([projectSlug])
+        }
+      }
+    )
 
     function isProjectActive(projectSlug) {
       if (route.params.project === projectSlug) return true
@@ -103,15 +114,13 @@ export default {
       const set = new Set(expandedProjects.value)
       const opening = !set.has(projectSlug)
       if (opening) {
-        set.add(projectSlug)
+        // Opening a project closes every other project for a consistent,
+        // uncluttered navigation view.
+        expandedProjects.value = new Set([projectSlug])
       } else {
         set.delete(projectSlug)
+        expandedProjects.value = set
       }
-      expandedProjects.value = set
-      if (opening && route.params.project !== projectSlug) {
-        router.push(`/${projectSlug}`)
-      }
-      emit('navigate')
     }
 
     return { projectList, segments, isProjectActive, isExpanded, toggleProject }

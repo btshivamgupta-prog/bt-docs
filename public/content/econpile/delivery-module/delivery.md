@@ -63,7 +63,7 @@ erDiagram
     rentals ||--o{ line_items : "parent=id, type=12"
     deliveries ||--o{ line_items : "parent=id, type=10"
     rentals ||--o{ deliveries : "convert_id when convert_type=rental"
-    line_items ||--o{ line_items : "delivery parent_line_item -> rental id"
+    line_items ||--o| line_items : "source line"
     deliveries ||--o{ delivery_teams : delivery
     deliveries ||--o{ delivery_forms : delivery
     deliveries ||--o{ delivery_histories : delivery
@@ -129,31 +129,31 @@ The conversion save stores `deliveries.convert_type` and `deliveries.convert_id`
 
 ```mermaid
 flowchart TD
-    A[Open active rental] --> B{delivery:create permission?}
-    B -- No --> Z[Unavailable]
-    B -- Yes --> C{Returned, fully delivered, or no selected lines?}
-    C -- Yes --> Y[Frontend error; no API call]
-    C -- No --> D[Choose incoming if installation_status > 0, otherwise outgoing]
-    D --> E[Route with convertType, convertId, rentalLineItemIds]
-    E --> F[GET delivery/options]
-    F --> G[Load rental type-12 lines and normalize data]
-    G --> H[Submit POST delivery]
-    H --> I{Validation/date checks pass?}
-    I -- No --> X[HTTP 422]
-    I -- Yes --> J[DB::beginTransaction]
-    J --> K[Create deliveries row, status=1, convert_type/id]
-    K --> L[Replace delivery_teams]
-    L --> M{Rental conversion?}
-    M -- Yes --> N[Validate and lock source rental lines]
-    N --> O{Invalid or duplicate source line?}
-    O -- Yes --> R[ROLLBACK; HTTP 422]
-    O -- No --> P[Replace delivery lines/properties]
-    M -- No --> P
-    P --> Q[Create applicable equipment/property rows]
-    Q --> S[Totals, tags, attachments, calculation dispatch]
-    S --> T[COMMIT]
-    T --> U[HTTP success]
-    J -. exception .-> R2[ROLLBACK; HTTP 500 path]
+    A["Open active rental"] --> B{"Has delivery create permission?"}
+    B -->|No| Z["Unavailable"]
+    B -->|Yes| C{"Any selected line still eligible?"}
+    C -->|No| Y["Show frontend error"]
+    C -->|Yes| D["Choose Incoming or Outgoing delivery"]
+    D --> E["Route with rental conversion parameters"]
+    E --> F["Load delivery options"]
+    F --> G["Load and normalize selected rental lines"]
+    G --> H["Submit delivery"]
+    H --> I{"Validation and date checks pass?"}
+    I -->|No| X["Return HTTP 422"]
+    I -->|Yes| J["Begin database transaction"]
+    J --> K["Create delivery header"]
+    K --> L["Replace delivery team"]
+    L --> M{"Rental conversion?"}
+    M -->|Yes| N["Validate and lock source rental lines"]
+    N --> O{"Source lines valid and unique?"}
+    O -->|No| R["Roll back and return HTTP 422"]
+    O -->|Yes| P["Replace delivery lines and properties"]
+    M -->|No| P
+    P --> Q["Create applicable equipment and properties"]
+    Q --> S["Calculate totals, tags, attachments, and dispatch"]
+    S --> T["Commit transaction"]
+    T --> U["Return success"]
+    J -. exception .-> R2["Roll back and return HTTP 500"]
 ```
 
 ## 4. Field mapping and business rules
