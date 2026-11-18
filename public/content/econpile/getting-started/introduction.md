@@ -7,6 +7,13 @@ Econpile is a field-service management (FSM) platform: customers, assets, rental
 visits/jobs, quotations, invoices, and so on. The backend is **Laravel** (API + SPA
 frontend in the same repo) and the frontend is **Vue 2 + Vuetify 2**.
 
+For the full product map, start with [Dashboard](/econpile/modules/dashboard).
+The **Product Modules** section mirrors the menu labels seeded in
+`database/seeder-data/menu-list.json`, including the nested Calendar, CRM, Visit,
+Rental, Asset, Delivery, and Reports pages. Shared implementation rules, including
+the global emoji guard and numeric input contract, are in
+[Input Validation & Data Quality](/econpile/engineering-standards/input-validation).
+
 This documentation covers two features in depth:
 
 1. the **Public Service Portal** — the login-free page that opens when somebody scans the QR

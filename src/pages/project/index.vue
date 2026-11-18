@@ -169,9 +169,12 @@ export default {
 
     const editUrl = computed(() => {
       if (!route.params.project) return '#'
-      const segs = mode.value === 'requirements'
-        ? ['requirements', ...segments.value]
+      const sourceSegments = currentPage.value?.contentPath
+        ? [segments.value[0], currentPage.value.contentPath]
         : segments.value
+      const segs = mode.value === 'requirements'
+        ? ['requirements', ...sourceSegments]
+        : sourceSegments
       return getEditUrl(route.params.project, segs)
     })
 
@@ -233,9 +236,14 @@ export default {
       try {
         // Docs live at /content/{project}/... ; requirements at /content/requirements/{project}/...
         const isReq = mode.value === 'requirements'
+        // Grouping nodes can expose existing files under a nested navigation URL.
+        // contentPath keeps one source document while the sidebar stays hierarchical.
+        const contentSegments = !isReq && currentPage.value?.contentPath
+          ? [segs[0], currentPage.value.contentPath]
+          : segs
         const url = isReq
-          ? `/content/requirements/${project}/${segs.join('/')}.md`
-          : `/content/${project}/${segs.join('/')}.md`
+          ? `/content/requirements/${project}/${contentSegments.join('/')}.md`
+          : `/content/${project}/${contentSegments.join('/')}.md`
         const response = await fetch(url)
         if (response.ok) {
           pageContent.value = await response.text()
