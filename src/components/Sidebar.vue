@@ -50,6 +50,7 @@
               :base-path="`/${project.slug}/${sectionSlug}`"
               :depth="1"
               :segments="segments"
+              :current-path="route.path"
               @navigate="$emit('navigate')"
             />
           </div>
@@ -123,7 +124,7 @@ export default {
       }
     }
 
-    return { projectList, segments, isProjectActive, isExpanded, toggleProject }
+    return { route, projectList, segments, isProjectActive, isExpanded, toggleProject }
   },
 }
 </script>

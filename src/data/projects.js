@@ -32,6 +32,52 @@
  */
 
 export const projects = {
+  'cmworkz': {
+    name: 'CM Werkz (Tnine)',
+    description: 'Field-service operations platform with transformer oil sampling, analysis, and PDF reporting.',
+    icon: '⚡',
+    sections: {
+      'getting-started': {
+        title: 'Getting Started',
+        pages: [
+          { slug: 'overview', title: 'Overview', contentSegments: ['getting-started', 'introduction'], children: [
+            { slug: 'introduction', title: 'Introduction', contentSegments: ['getting-started', 'introduction'] },
+            { slug: 'local-development', title: 'Local Development & Operations', contentSegments: ['getting-started', 'local-development'] },
+          ] },
+        ],
+      },
+      'architecture': {
+        title: 'Architecture & Data',
+        pages: [
+          { slug: 'overview', title: 'Overview', contentSegments: ['architecture', 'system-architecture'], children: [
+            { slug: 'system-architecture', title: 'System Architecture', contentSegments: ['architecture', 'system-architecture'] },
+            { slug: 'core-data-model', title: 'Core Data Model', contentSegments: ['architecture', 'core-data-model'] },
+            { slug: 'routes-and-api', title: 'Frontend Routes & API Surface', contentSegments: ['architecture', 'routes-and-api'] },
+          ] },
+        ],
+      },
+      'oil-analysis': {
+        title: 'Transformer Oil Analysis',
+        pages: [
+          { slug: 'overview', title: 'Overview', contentSegments: ['oil-analysis', 'workflow'], children: [
+            { slug: 'workflow', title: 'End-to-End Workflow', contentSegments: ['oil-analysis', 'workflow'] },
+            { slug: 'batches-and-samples', title: 'Oil Batches & Samples', contentSegments: ['oil-analysis', 'batches-and-samples'] },
+            { slug: 'reports-and-pdf', title: 'Reports, Charts & PDF Generation', contentSegments: ['oil-analysis', 'reports-and-pdf'] },
+            { slug: 'troubleshooting', title: 'Troubleshooting & Safe Changes', contentSegments: ['oil-analysis', 'troubleshooting'] },
+          ] },
+        ],
+      },
+      'field-service': {
+        title: 'Field Service',
+        pages: [
+          { slug: 'overview', title: 'Overview', contentSegments: ['field-service', 'jobs-visits-line-items'], children: [
+            { slug: 'jobs-visits-line-items', title: 'Jobs, Visits & Line Items', contentSegments: ['field-service', 'jobs-visits-line-items'] },
+            { slug: 'active-modules', title: 'Active Modules & Menu Seed', contentSegments: ['field-service', 'active-modules'] },
+          ] },
+        ],
+      },
+    },
+  },
 
 
   
@@ -46,20 +92,23 @@ export const projects = {
       'getting-started': {
         title: 'Getting Started',
         pages: [
-          { slug: 'introduction', title: 'Introduction' },
+          { slug: 'overview', title: 'Overview', contentSegments: ['getting-started', 'introduction'], children: [
+            { slug: 'introduction', title: 'Introduction', contentSegments: ['getting-started', 'introduction'] },
+          ] },
         ],
       },
       'product-stock-management': {
         title: 'Product Stock Management',
         pages: [
-          { slug: 'overview', title: 'Overview' },
-          { slug: 'stock-columns', title: 'Stock Columns' },
-          { slug: 'stock-helpers', title: 'Stock Helper Methods' },
-          { slug: 'visit-job-lifecycle', title: 'Visit / Job Lifecycle' },
-          { slug: 'serialized-products', title: 'Serialized Products' },
-          { slug: 'stock-adjustments', title: 'Stock Adjustments' },
-          { slug: 'audit-trail', title: 'Audit Trail' },
-          { slug: 'rules-for-developers', title: 'Rules for Developers' },
+          { slug: 'overview', title: 'Overview', contentSegments: ['product-stock-management', 'overview'], children: [
+            { slug: 'stock-columns', title: 'Stock Columns', contentSegments: ['product-stock-management', 'stock-columns'] },
+            { slug: 'stock-helpers', title: 'Stock Helper Methods', contentSegments: ['product-stock-management', 'stock-helpers'] },
+            { slug: 'visit-job-lifecycle', title: 'Visit / Job Lifecycle', contentSegments: ['product-stock-management', 'visit-job-lifecycle'] },
+            { slug: 'serialized-products', title: 'Serialized Products', contentSegments: ['product-stock-management', 'serialized-products'] },
+            { slug: 'stock-adjustments', title: 'Stock Adjustments', contentSegments: ['product-stock-management', 'stock-adjustments'] },
+            { slug: 'audit-trail', title: 'Audit Trail', contentSegments: ['product-stock-management', 'audit-trail'] },
+            { slug: 'rules-for-developers', title: 'Rules for Developers', contentSegments: ['product-stock-management', 'rules-for-developers'] },
+          ] },
         ],
       },
     },
