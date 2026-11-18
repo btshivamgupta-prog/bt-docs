@@ -235,21 +235,4 @@ The delivery completion dialog accepts a remark and attachments. `completeDelive
 
 The detail-level assignment code validates that at least one engineer is selected and dispatches `PUT /delivery/{id}/driver` from `updateEngineer()`. No matching route was found in the current `routes/api.php` excerpt, so this action should be verified in the target deployment before changing it. The create/update save path definitely replaces `delivery_teams` rows through `updateOrCreateD1()`.
 
-### Reschedule
-
-The reschedule dialog uses start and end date pickers. `updateAppointmentDate()` and `updateAppointmentEndDate()` update the form state; `updateAppointment()` submits the changed appointment and reloads the delivery. Driver availability is checked against the schedule so already booked/unavailable engineers are not offered.
-
-## Troubleshooting
-
-- Delivery not created: inspect the `POST delivery` response, validation errors, date order, and inactive equipment check.
-- Transfer rejected: verify `to_customer` and `to_property`.
-- Wrong quantity: compare `line_items.quantity` where `type = 10`.
-- Missing driver: inspect `delivery_teams` and submitted team ids.
-- Rental item unavailable: check rental status, returned/delivered quantities, and existing source-line links.
-- Duplicate conversion: search delivery lines by `parent_line_item` and `parent_line_item_type = 'rental'`.
-- Wrong status: inspect `deliveries.status`, `statuses`, and `updateDeliveryStatus()`.
-- Audit trail: inspect `delivery_histories`; application logs are under `storage/logs`.
-
-## Verification note
-
-The routes, file paths, controller methods, models, tables, line-item types, and three delivery flows were verified against the current codebase. No credentials or sensitive configuration values are included.
+ 
