@@ -4,7 +4,7 @@
       <!-- Item row: chevron (if has children) + link -->
       <div
         class="flex items-center rounded-md"
-        :class="isActive(depth, item.slug) ? 'bg-primary-50 dark:bg-primary-950' : ''"
+        :class="isActive(item) ? 'bg-primary-50 dark:bg-primary-950' : ''"
       >
         <!-- Collapse/expand toggle (only when the item has children) -->
         <button
@@ -27,7 +27,7 @@
         <router-link
           :to="itemPath(item)"
           class="sidebar-link flex-1"
-          :class="isActive(depth, item.slug) ? 'sidebar-link-active' : 'sidebar-link-inactive'"
+          :class="isActive(item) ? 'sidebar-link-active' : 'sidebar-link-inactive'"
           @click="$emit('navigate')"
         >
           {{ item.title }}
@@ -44,6 +44,7 @@
           :base-path="itemPath(item)"
           :depth="depth + 1"
           :segments="segments"
+          :current-path="currentPath"
           @navigate="$emit('navigate')"
         />
       </div>
@@ -62,6 +63,7 @@ export default {
     basePath: { type: String, default: '' },
     depth: { type: Number, default: 0 },
     segments: { type: Array, default: () => [] },
+    currentPath: { type: String, default: '' },
   },
   setup(props) {
     // Which nodes are expanded, keyed by full path.
@@ -106,8 +108,11 @@ export default {
     itemPath(item) {
       return `${this.basePath}/${item.slug}`
     },
-    isActive(depth, slug) {
-      return this.segments && this.segments[depth] === slug
+    isActive(item) {
+      const path = this.itemPath(item)
+      // Slugs such as `overview` recur in several sections. Comparing the
+      // complete route prevents unrelated sibling groups from appearing active.
+      return this.currentPath === path || this.currentPath.startsWith(`${path}/`)
     },
   },
 }

@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mermaid diagrams are generated from Markdown code fences. */
+.prose .mermaid {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid rgb(229 231 235);
+  border-radius: 0.5rem;
+  background: rgb(255 255 255);
+  text-align: center;
+}
+
+.dark .prose .mermaid {
+  border-color: rgb(55 65 81);
+  background: rgb(17 24 39);
+}
+
+.prose .mermaid svg {
+  min-width: 42rem;
+  max-width: none;
+  height: auto;
+}
+
+.prose .mermaid-error {
+  white-space: pre;
+  text-align: left;
+  color: rgb(185 28 28);
+}
+
 @layer base {
   :root {
     --sidebar-width: 280px;
