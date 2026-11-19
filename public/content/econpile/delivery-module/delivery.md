@@ -170,7 +170,7 @@ The listing implementation is `frontend/src/view/pages/delivery/Delivery-Listing
 
 Filter values are converted into query parameters such as `search`, `daterange`, `customer`, `engineer`, `status`, and `property`. The list reload is performed by `getDeliveries()` and the store/API query used by the listing component.
 
-### Row selection and bulk assignment
+### Row selection and bulk assignment   
 
 Each row has a checkbox. The select-all checkbox selects visible eligible rows. Rows with status `2` or `7` are disabled/read-only for selection in the current component. Once rows are selected, `Bulk Assign` opens the bulk reschedule/driver dialog. `Clear Selections` only resets the client-side selection.
 
@@ -182,7 +182,7 @@ Each row has a checkbox. The select-all checkbox selects visible eligible rows. 
 - Exchange and repair flags are displayed when `is_exchange` or `is_repair` is set.
 - Address columns show pickup or drop-off address depending on the delivery type.
 - Status cells display the status label/color and may include the status action component using `delivery/status`.
-- Header cells marked sortable call `updateSorting()` and reload the list with the selected sort direction.
+- Header cells marked sortable call `updateSorting()` and reload the list with the selected sort direction.   
 - Column visibility/order is persisted through the listing preference mechanism by `updateVisible()`.
 - Pagination and per-page changes are handled through the pagination event bus and reload the current filter set.
 

@@ -41,18 +41,32 @@
         <!-- Sections (shown when expanded) -->
         <div v-if="isExpanded(project.slug)" class="ml-4 mt-1 space-y-3">
           <div v-for="(section, sectionSlug) in project.sections" :key="sectionSlug">
-            <p class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-              {{ section.title }}
-            </p>
+            <button
+              type="button"
+              class="flex w-full items-center gap-1 rounded-md px-2 py-1 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+              :aria-expanded="isSectionExpanded(project.slug, sectionSlug)"
+              @click="toggleSection(project.slug, sectionSlug)"
+            >
+              <svg
+                class="h-3 w-3 shrink-0 transition-transform duration-200"
+                :class="isSectionExpanded(project.slug, sectionSlug) ? 'rotate-90' : ''"
+                fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+              <span>{{ section.title }}</span>
+            </button>
             <!-- Recursive menu: renders pages + nested children at any depth -->
-            <SidebarMenu
-              :items="section.pages"
-              :base-path="`/${project.slug}/${sectionSlug}`"
-              :depth="1"
-              :segments="segments"
-              :current-path="route.path"
-              @navigate="$emit('navigate')"
-            />
+            <div v-if="isSectionExpanded(project.slug, sectionSlug)" class="mt-0.5">
+              <SidebarMenu
+                :items="section.pages"
+                :base-path="`/${project.slug}/${sectionSlug}`"
+                :depth="1"
+                :segments="segments"
+                :current-path="route.path"
+                @navigate="$emit('navigate')"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -88,6 +102,16 @@ export default {
 
     const initialSlug = route.params.project || projectList.value[0]?.slug
     const expandedProjects = ref(new Set(initialSlug ? [initialSlug] : []))
+    const expandedSections = ref(new Set())
+
+    function expandSectionsForProject(projectSlug) {
+      const project = projectList.value.find((item) => item.slug === projectSlug)
+      expandedSections.value = new Set(
+        Object.keys(project?.sections || {}).map((sectionSlug) => `${projectSlug}/${sectionSlug}`),
+      )
+    }
+
+    expandSectionsForProject(initialSlug)
 
     // The sidebar is an accordion at the project level. Navigation can happen
     // through links, search, or the browser history, so keep its open state in
@@ -97,9 +121,22 @@ export default {
       (projectSlug) => {
         if (projectSlug) {
           expandedProjects.value = new Set([projectSlug])
+          expandSectionsForProject(projectSlug)
         }
       }
     )
+
+    function isSectionExpanded(projectSlug, sectionSlug) {
+      return expandedSections.value.has(`${projectSlug}/${sectionSlug}`)
+    }
+
+    function toggleSection(projectSlug, sectionSlug) {
+      const key = `${projectSlug}/${sectionSlug}`
+      const set = new Set(expandedSections.value)
+      if (set.has(key)) set.delete(key)
+      else set.add(key)
+      expandedSections.value = set
+    }
 
     function isProjectActive(projectSlug) {
       if (route.params.project === projectSlug) return true
@@ -124,7 +161,16 @@ export default {
       }
     }
 
-    return { route, projectList, segments, isProjectActive, isExpanded, toggleProject }
+    return {
+      route,
+      projectList,
+      segments,
+      isProjectActive,
+      isExpanded,
+      toggleProject,
+      isSectionExpanded,
+      toggleSection,
+    }
   },
 }
 </script>
