@@ -21,8 +21,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
           </svg>
         </button>
-        <!-- Spacer when no children, to keep titles aligned -->
-        <span v-else class="w-[18px] shrink-0"></span>
+        <!-- Leaf-page marker; expandable items keep the chevron above. -->
+        <span v-else class="flex w-[18px] shrink-0 items-center justify-center text-[10px] text-gray-400 dark:text-gray-500">&bull;</span>
 
         <router-link
           :to="itemPath(item)"

@@ -92,23 +92,42 @@ export const projects = {
       'getting-started': {
         title: 'Getting Started',
         pages: [
-          { slug: 'overview', title: 'Overview', contentSegments: ['getting-started', 'introduction'], children: [
-            { slug: 'introduction', title: 'Introduction', contentSegments: ['getting-started', 'introduction'] },
-          ] },
+          { slug: 'overview', title: 'Overview', contentSegments: ['getting-started', 'introduction'] },
+          { slug: 'introduction', title: 'Introduction', contentSegments: ['getting-started', 'introduction'] },
         ],
       },
       'product-stock-management': {
         title: 'Product Stock Management',
         pages: [
-          { slug: 'overview', title: 'Overview', contentSegments: ['product-stock-management', 'overview'], children: [
-            { slug: 'stock-columns', title: 'Stock Columns', contentSegments: ['product-stock-management', 'stock-columns'] },
-            { slug: 'stock-helpers', title: 'Stock Helper Methods', contentSegments: ['product-stock-management', 'stock-helpers'] },
-            { slug: 'visit-job-lifecycle', title: 'Visit / Job Lifecycle', contentSegments: ['product-stock-management', 'visit-job-lifecycle'] },
-            { slug: 'serialized-products', title: 'Serialized Products', contentSegments: ['product-stock-management', 'serialized-products'] },
-            { slug: 'stock-adjustments', title: 'Stock Adjustments', contentSegments: ['product-stock-management', 'stock-adjustments'] },
-            { slug: 'audit-trail', title: 'Audit Trail', contentSegments: ['product-stock-management', 'audit-trail'] },
-            { slug: 'rules-for-developers', title: 'Rules for Developers', contentSegments: ['product-stock-management', 'rules-for-developers'] },
-          ] },
+          { slug: 'overview', title: 'Overview', contentSegments: ['product-stock-management', 'overview'] },
+          { slug: 'stock-columns', title: 'Stock Columns', contentSegments: ['product-stock-management', 'stock-columns'] },
+          { slug: 'stock-helpers', title: 'Stock Helper Methods', contentSegments: ['product-stock-management', 'stock-helpers'] },
+          { slug: 'visit-job-lifecycle', title: 'Visit / Job Lifecycle', contentSegments: ['product-stock-management', 'visit-job-lifecycle'] },
+          { slug: 'serialized-products', title: 'Serialized Products', contentSegments: ['product-stock-management', 'serialized-products'] },
+          { slug: 'stock-adjustments', title: 'Stock Adjustments', contentSegments: ['product-stock-management', 'stock-adjustments'] },
+          { slug: 'audit-trail', title: 'Audit Trail', contentSegments: ['product-stock-management', 'audit-trail'] },
+          { slug: 'rules-for-developers', title: 'Rules for Developers', contentSegments: ['product-stock-management', 'rules-for-developers'] },
+        ],
+      },
+      'rental': {
+        title: 'Rental',
+        pages: [
+          { slug: 'overview', title: 'Overview' },
+          { slug: 'architecture-and-dependencies', title: 'Architecture & Dependencies' },
+          { slug: 'buttons-and-statuses', title: 'Buttons & Statuses' },
+          { slug: 'return-process', title: 'Return Process' },
+          { slug: 'api-reference', title: 'API Reference' },
+          { slug: 'jobs-and-troubleshooting', title: 'Jobs & Troubleshooting' },
+        ],
+      },
+      'customer-owned-assets': {
+        title: 'Customer-Owned Assets',
+        pages: [
+          { slug: 'overview', title: 'Overview' },
+          { slug: 'item-list-and-detail', title: 'Item List & Detail' },
+          { slug: 'rental-history', title: 'Asset Rental History' },
+          { slug: 'status-and-return-conditions', title: 'Status & Return Conditions' },
+          { slug: 'database-and-debugging', title: 'Database & Debugging' },
         ],
       },
     },
