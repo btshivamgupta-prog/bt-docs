@@ -2,14 +2,21 @@
   <header
     class="sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 lg:px-6"
   >
-    <!-- Mobile menu button -->
+    <!-- Sidebar toggle -->
     <button
-      class="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+      class="p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
       @click="$emit('toggle-sidebar')"
-      aria-label="Toggle sidebar"
+      :aria-label="sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'"
+      :title="sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar'"
     >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <svg class="w-5 h-5 lg:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+      <svg v-if="sidebarCollapsed" class="hidden w-5 h-5 lg:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6" />
+      </svg>
+      <svg v-else class="hidden w-5 h-5 lg:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m15 18-6-6 6-6" />
       </svg>
     </button>
 
@@ -141,6 +148,12 @@ import { useAccentColor } from '@/composables/useAccentColor'
 
 export default {
   name: 'TopHeader',
+  props: {
+    sidebarCollapsed: {
+      type: Boolean,
+      default: false,
+    },
+  },
   emits: ['toggle-sidebar'],
   setup() {
     const { currentProject, currentSection } = useDocs()

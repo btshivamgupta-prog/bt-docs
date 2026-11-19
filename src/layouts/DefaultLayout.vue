@@ -10,9 +10,11 @@
     <!-- Sidebar -->
     <Sidebar
       :class="[
-        'fixed inset-y-0 left-0 z-50 w-[280px] transform transition-transform duration-300 lg:relative lg:translate-x-0',
+        'fixed inset-y-0 left-0 z-50 w-[280px] transform transition-[transform,width] duration-300 lg:relative lg:translate-x-0 lg:shrink-0',
         sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+        desktopSidebarCollapsed ? 'lg:w-0 lg:border-r-0 lg:pointer-events-none' : 'lg:w-[280px]',
       ]"
+      :aria-hidden="desktopSidebarCollapsed"
       @navigate="sidebarOpen = false"
     />
 
@@ -27,7 +29,10 @@
       </div>
 
       <!-- Top header bar -->
-      <TopHeader @toggle-sidebar="sidebarOpen = !sidebarOpen" />
+      <TopHeader
+        :sidebar-collapsed="desktopSidebarCollapsed"
+        @toggle-sidebar="toggleSidebar"
+      />
 
       <!-- Page content -->
       <main ref="mainEl" class="flex-1 overflow-y-auto scrollbar-thin" @scroll="onScroll">
@@ -67,7 +72,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
 import TopHeader from '@/components/TopHeader.vue'
 import SearchPalette from '@/components/SearchPalette.vue'
@@ -77,6 +82,7 @@ export default {
   components: { Sidebar, TopHeader, SearchPalette },
   setup() {
     const sidebarOpen = ref(false)
+    const desktopSidebarCollapsed = ref(false)
     const mainEl = ref(null)
     const progress = ref(0)
     const showBackTop = ref(false)
@@ -93,7 +99,29 @@ export default {
       mainEl.value && mainEl.value.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
-    return { sidebarOpen, mainEl, progress, showBackTop, onScroll, scrollToTop }
+    function toggleSidebar() {
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        desktopSidebarCollapsed.value = !desktopSidebarCollapsed.value
+        localStorage.setItem('sidebar-collapsed', String(desktopSidebarCollapsed.value))
+      } else {
+        sidebarOpen.value = !sidebarOpen.value
+      }
+    }
+
+    onMounted(() => {
+      desktopSidebarCollapsed.value = localStorage.getItem('sidebar-collapsed') === 'true'
+    })
+
+    return {
+      sidebarOpen,
+      desktopSidebarCollapsed,
+      mainEl,
+      progress,
+      showBackTop,
+      onScroll,
+      scrollToTop,
+      toggleSidebar,
+    }
   },
 }
 </script>
