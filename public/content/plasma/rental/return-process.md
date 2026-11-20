@@ -13,7 +13,7 @@ The return endpoint is `POST /api/rental/bulk-return-items`, handled by `RentalC
     "return_quantity": 1,
     "return_date": "2026-11-19",
     "remarks": "Returned in good condition",
-    "condition": "Good",
+    "condition": "Good",   
     "attachment_keys": []
   }
 }

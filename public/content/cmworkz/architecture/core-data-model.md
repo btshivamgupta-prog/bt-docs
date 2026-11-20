@@ -1,30 +1,63 @@
-# Core Data Model
+﻿# Database Schema
 
-The oil-analysis feature is built on top of the normal field-service hierarchy. Most relationship columns are integer IDs, so correct linking is an application responsibility rather than a database guarantee.
+The schema is migration-driven. This page focuses on tables central to business flows; it is not a replacement for reading all migrations.
 
-```mermaid
+## Core entities
+
+| Table | Model(s) | Purpose / verified key fields |
+|---|---|---|
+| users | App\Models\User | Login identity, channel, activation/ban flags, role, linked customer/engineer/company, audit fields |
+| customers | Customer\Customer | Customer/company master, barcode, group/entity, activation and reminder flags |
+| engineers | Engineer\Engineer | Field staff, driver/online/tracking fields, leave and certificates |
+| equipment | Equipment\Equipment | Assets associated with customers, products, locations, warranty, rental, and sample data |
+| products, product_batches, movement/serial tables | Product\Product, ProductBatch | Goods/services/equipment catalogue and stock; accounting is fifo, fefo, or none; type is goods, service, or equipment |
+| tickets, ticket_visits | Ticket models | Service/job records and scheduled visits; supporting team, engineer, address, reminder, form, time, trip, and closer tables |
+| line_items and related tables | LineItem\LineItem | Transaction items shared by quotations, contracts, invoices, purchase orders, tickets, and projects |
+| quotations, contracts | Quotation/Contract models | Commercial documents; status 1 Draft, 2 Accepted, 3 Rejected, 4 Pending, 5 Sent, 6 Cancelled, 7 Closed |
+| purchase_orders | PurchaseOrder\PurchaseOrder | Supplier procurement and receiving; GRN/required/received-history tables also exist |
+| invoices, payments, credit-note tables | Invoice/Payment/CreditNote models | Billing, receipts, credit notes, histories, recurrence, and locking |
+| projects, project_members, project_costings | Project models | Projects, members, costing, tasks, and linked transactions |
+| tasks, task_members, task_timesheets | Task models | Work planning, assigned members/managers, time, and history |
+| expenses, expense_categories, user_expense_amounts | Expense models | Expense claims, amount rules, customer/project links, payment modes, documents |
+| preventive_maintanance, preventive_schedules, recurrence tables | Preventive models | Preventive maintenance plans and recurrence |
+| oil_samples, oil_batches, oil_reports, oil_sample_results, report_summaries | Oil models | Sample lifecycle, batching, analysis results, and reports |
+| statuses, app_settings, module_settings, menus | Corresponding models | Configurable status/settings/menu data |
+| jobs, failed_jobs, job_batches | Laravel queue tables | Queue payloads, failures, and batches |
+
+## Verified relationships and cautions
+
+- Task belongs to User via added_by/updated_by, Engineer via assign, Lead, Customer, and Project; it has members and transaction documents.
+- Expense belongs to User, Customer, Project, and PaymentMode, and has transaction documents.
+- OilReport has many OilSampleResult and OilReportHistory, belongs to OilBatch, and has typed transaction-document relations.
+- Invoice and transaction models define relations to customer, contact persons, quotation/ticket/visit/project, line items, payments, histories, reminders, and recurrence as implemented in their files.
+- Ticket and visit relationships are distributed between models and Ticket*Trait classes; inspect app/Models/Ticket and app/Traits/TicketTrait.php, TicketVisitTrait.php, and VisitTrait.php together.
+- Legacy integer columns such as customer, engineer, project, visit, and parent are not consistently database foreign keys. Never infer a relationship from a column name alone.
+
+## ER diagram
+
+~~~mermaid
 erDiagram
-  CUSTOMERS ||--o{ EQUIPMENT : owns
-  CUSTOMERS ||--o{ SITES : has
-  SITES ||--o{ EQUIPMENT : locates
+  USERS ||--o{ TICKETS : creates
+  CUSTOMERS ||--o{ TICKETS : owns
   TICKETS ||--o{ TICKET_VISITS : schedules
-  TICKET_VISITS ||--o{ OIL_BATCHES : traces
-  EQUIPMENT ||--o{ OIL_SAMPLES : supplies
-  OIL_BATCHES ||--o{ OIL_SAMPLES : contains
-  OIL_BATCHES ||--o| OIL_REPORTS : reported_by
-  OIL_REPORTS ||--o{ OIL_SAMPLE_RESULTS : includes
-  OIL_SAMPLES ||--o{ OIL_SAMPLE_RESULTS : measured_as
-```
+  ENGINEERS ||--o{ TICKET_VISITS : assigned
+  CUSTOMERS ||--o{ EQUIPMENT : owns
+  PRODUCTS ||--o{ LINE_ITEMS : referenced
+  QUOTATIONS ||--o{ LINE_ITEMS : contains
+  QUOTATIONS ||--o| CONTRACTS : converts
+  TICKETS ||--o{ LINE_ITEMS : contains
+  PROJECTS ||--o{ TASKS : contains
+  PROJECTS ||--o{ EXPENSES : incurs
+  CUSTOMERS ||--o{ INVOICES : billed
+  INVOICES ||--o{ PAYMENTS : receives
+  OIL_BATCHES ||--o{ OIL_SAMPLES : groups
+  OIL_REPORTS ||--o{ OIL_SAMPLE_RESULTS : contains
+~~~
 
-## Relationship rules
+Exact cardinality for every edge is not verified because many links are legacy integer references without database foreign-key constraints. Ticket, invoice, visit, purchase-order, and oil status meanings must be checked in StatusSeeder.php, relevant controller/model code, and frontend labels.
 
-- A transformer is an `equipment` row, not a separate transformer table.
-- An oil batch has **many** samples via `oil_sample.oil_batch_id`.
-- A sample points to one transformer/equipment record and may carry the originating visit.
-- A report aggregates result rows for selected samples in a batch.
-- Code treats a batch as having one report (`OilBatch::oilReport()` is `hasOne`), but confirm this invariant before creating a second report because the database does not enforce it.
-- Historical comparison rows are not new physical samples; they are identified through `used_oil_sample`.
 
-## Migration reading order
 
-Read the initial create migration and all subsequent alters. Key tables include `equipment`, `tickets`, `ticket_visits`, `line_items`, `oil_batches`, `oil_sample`, `oil_reports`, and `oil_sample_results`.
+
+## Modules and Business Logic
+

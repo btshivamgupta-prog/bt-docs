@@ -1,6 +1,6 @@
-/**
+﻿/**
  * ============================================================================
- *  PROJECTS CONFIG — The single source of truth for all docs.
+ *  PROJECTS CONFIG â€” The single source of truth for all docs.
  * ============================================================================
  *
  *  TO ADD A NEW PROJECT:
@@ -15,8 +15,8 @@
  *  {
  *    name:        'Human-readable name shown everywhere',
  *    description: 'Short summary shown on home card & project landing',
- *    icon:        'Any emoji — used on home cards & project header',
- *    repo:        'GitHub repo URL (optional — powers "Edit this page" link)',
+ *    icon:        'Any emoji â€” used on home cards & project header',
+ *    repo:        'GitHub repo URL (optional â€” powers "Edit this page" link)',
  *    sections: {
  *      'section-slug': {
  *        title: 'Section label in sidebar & landing cards',
@@ -33,60 +33,128 @@
 
 export const projects = {
   'cmworkz': {
-    name: 'CM Werkz (Tnine)',
-    description: 'Field-service operations platform with transformer oil sampling, analysis, and PDF reporting.',
-    icon: '⚡',
+    name: 'CM Werkz',
+    description: 'Field-service operations platform with customer, site, service, inventory, finance, and transformer-oil workflows.',
+    icon: 'CM',
     sections: {
       'getting-started': {
         title: 'Getting Started',
         pages: [
-          { slug: 'overview', title: 'Overview', contentSegments: ['getting-started', 'introduction'], children: [
-            { slug: 'introduction', title: 'Introduction', contentSegments: ['getting-started', 'introduction'] },
-            { slug: 'local-development', title: 'Local Development & Operations', contentSegments: ['getting-started', 'local-development'] },
-          ] },
+          { slug: 'introduction', title: 'Introduction', contentSegments: ['getting-started', 'introduction'] },
+          { slug: 'local-development', title: 'Local Development & Operations', contentSegments: ['getting-started', 'local-development'] },
+          { slug: 'troubleshooting', title: 'Troubleshooting', contentSegments: ['getting-started', 'troubleshooting'] },
+          { slug: 'developer-quick-reference', title: 'Developer Quick Reference', contentSegments: ['getting-started', 'developer-quick-reference'] },
         ],
       },
       'architecture': {
         title: 'Architecture & Data',
         pages: [
-          { slug: 'overview', title: 'Overview', contentSegments: ['architecture', 'system-architecture'], children: [
-            { slug: 'system-architecture', title: 'System Architecture', contentSegments: ['architecture', 'system-architecture'] },
-            { slug: 'core-data-model', title: 'Core Data Model', contentSegments: ['architecture', 'core-data-model'] },
-            { slug: 'routes-and-api', title: 'Frontend Routes & API Surface', contentSegments: ['architecture', 'routes-and-api'] },
-          ] },
+          { slug: 'system-architecture', title: 'System Architecture', contentSegments: ['architecture', 'system-architecture'] },
+          { slug: 'core-data-model', title: 'Core Data Model', contentSegments: ['architecture', 'core-data-model'] },
+          { slug: 'routes-and-api', title: 'Frontend Routes & API Surface', contentSegments: ['architecture', 'routes-and-api'] },
+          { slug: 'complete-api-route-inventory', title: 'Complete API Route Inventory', contentSegments: ['architecture', 'complete-api-route-inventory'] },
+          { slug: 'controller-method-inventory', title: 'Controller Method Inventory', contentSegments: ['architecture', 'controller-method-inventory'] },
+          { slug: 'model-relationship-inventory', title: 'Model Relationship Inventory', contentSegments: ['architecture', 'model-relationship-inventory'] },
+          { slug: 'pdf-print-excel-data-flow', title: 'PDF, Print, Excel & Export Data Flow', contentSegments: ['architecture', 'pdf-print-excel-data-flow'] },
         ],
       },
-      'oil-analysis': {
-        title: 'Transformer Oil Analysis',
+      'modules': {
+        title: 'Product Modules',
         pages: [
-          { slug: 'overview', title: 'Overview', contentSegments: ['oil-analysis', 'workflow'], children: [
-            { slug: 'workflow', title: 'End-to-End Workflow', contentSegments: ['oil-analysis', 'workflow'] },
-            { slug: 'batches-and-samples', title: 'Oil Batches & Samples', contentSegments: ['oil-analysis', 'batches-and-samples'] },
-            { slug: 'reports-and-pdf', title: 'Reports, Charts & PDF Generation', contentSegments: ['oil-analysis', 'reports-and-pdf'] },
-            { slug: 'troubleshooting', title: 'Troubleshooting & Safe Changes', contentSegments: ['oil-analysis', 'troubleshooting'] },
+          { slug: 'customer', title: 'Customer', children: [
+            { slug: 'overview', title: 'Customer Overview', contentSegments: ['modules', 'customer', 'overview'] },
+            { slug: 'contacts-and-addresses', title: 'Contacts & Addresses', contentSegments: ['modules', 'customer', 'contacts-and-addresses'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'customer', 'listing-and-item-actions'] },
           ] },
-        ],
-      },
-      'field-service': {
-        title: 'Field Service',
-        pages: [
-          { slug: 'overview', title: 'Overview', contentSegments: ['field-service', 'jobs-visits-line-items'], children: [
-            { slug: 'jobs-visits-line-items', title: 'Jobs, Visits & Line Items', contentSegments: ['field-service', 'jobs-visits-line-items'] },
-            { slug: 'active-modules', title: 'Active Modules & Menu Seed', contentSegments: ['field-service', 'active-modules'] },
+          { slug: 'site', title: 'Site / Property', children: [
+            { slug: 'overview', title: 'Site Overview', contentSegments: ['modules', 'site', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'site', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'supplier', title: 'Supplier', children: [
+            { slug: 'overview', title: 'Supplier Overview', contentSegments: ['modules', 'supplier', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'supplier', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'engineer', title: 'Engineer & Teams', children: [
+            { slug: 'overview', title: 'Engineer Overview', contentSegments: ['modules', 'engineer', 'overview'] },
+            { slug: 'teams-and-permissions', title: 'Teams & Permissions', contentSegments: ['modules', 'engineer', 'teams-and-permissions'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'engineer', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'products-parts', title: 'Products & Parts', children: [
+            { slug: 'overview', title: 'Products & Parts Overview', contentSegments: ['modules', 'products-parts', 'overview'] },
+            { slug: 'stock-and-batches', title: 'Stock & Batches', contentSegments: ['modules', 'products-parts', 'stock-and-batches'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'products-parts', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'equipment-assets', title: 'Equipment & Assets', children: [
+            { slug: 'overview', title: 'Equipment Overview', contentSegments: ['modules', 'equipment-assets', 'overview'] },
+            { slug: 'rentals-and-warranty', title: 'Rentals & Warranty', contentSegments: ['modules', 'equipment-assets', 'rentals-and-warranty'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'equipment-assets', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'jobs-visits', title: 'Jobs, Visits & Service', children: [
+            { slug: 'overview', title: 'Jobs & Visits Overview', contentSegments: ['modules', 'jobs-visits', 'overview'] },
+            { slug: 'visits-and-scheduling', title: 'Visits & Scheduling', contentSegments: ['modules', 'jobs-visits', 'visits-and-scheduling'] },
+            { slug: 'service-forms-and-line-items', title: 'Service Forms & Line Items', contentSegments: ['modules', 'jobs-visits', 'service-forms-and-line-items'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'jobs-visits', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'quotation-contract', title: 'Quotations & Contracts', children: [
+            { slug: 'overview', title: 'Quotation & Contract Overview', contentSegments: ['modules', 'quotation-contract', 'overview'] },
+            { slug: 'quotation', title: 'Quotation', contentSegments: ['modules', 'quotation-contract', 'quotation'] },
+            { slug: 'contract', title: 'Contract', contentSegments: ['modules', 'quotation-contract', 'contract'] },
+            { slug: 'pdf-and-signature', title: 'PDF & Signature', contentSegments: ['modules', 'quotation-contract', 'pdf-and-signature'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'quotation-contract', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'purchase-orders', title: 'Purchase Orders', children: [
+            { slug: 'overview', title: 'Purchase Order Overview', contentSegments: ['modules', 'purchase-orders', 'overview'] },
+            { slug: 'receiving-and-stock', title: 'Receiving & Stock', contentSegments: ['modules', 'purchase-orders', 'receiving-and-stock'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'purchase-orders', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'invoice-payment', title: 'Invoices, Payments & Credit Notes', children: [
+            { slug: 'overview', title: 'Invoice & Payment Overview', contentSegments: ['modules', 'invoice-payment', 'overview'] },
+            { slug: 'invoices', title: 'Invoices', contentSegments: ['modules', 'invoice-payment', 'invoices'] },
+            { slug: 'payments-and-credit-notes', title: 'Payments & Credit Notes', contentSegments: ['modules', 'invoice-payment', 'payments-and-credit-notes'] },
+            { slug: 'recurring-and-overdue', title: 'Recurring & Overdue', contentSegments: ['modules', 'invoice-payment', 'recurring-and-overdue'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'invoice-payment', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'projects-tasks-expenses', title: 'Projects, Tasks & Expenses', children: [
+            { slug: 'overview', title: 'Projects Overview', contentSegments: ['modules', 'projects-tasks-expenses', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'projects-tasks-expenses', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'preventive-maintenance', title: 'Preventive Maintenance', children: [
+            { slug: 'overview', title: 'Preventive Maintenance Overview', contentSegments: ['modules', 'preventive-maintenance', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'preventive-maintenance', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'oil-batch', title: 'Oil Batch', children: [
+            { slug: 'overview', title: 'Oil Batch Overview', contentSegments: ['modules', 'oil-batch', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'oil-batch', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'oil-sample', title: 'Oil Sample', children: [
+            { slug: 'overview', title: 'Oil Sample Overview', contentSegments: ['modules', 'oil-sample', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'oil-sample', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'oil-report', title: 'Oil Reports', children: [
+            { slug: 'overview', title: 'Oil Report Overview', contentSegments: ['modules', 'oil-report', 'overview'] },
+            { slug: 'pdf-and-results', title: 'PDF & Results', contentSegments: ['modules', 'oil-report', 'pdf-and-results'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'oil-report', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'calendar-tracking', title: 'Calendar & Tracking', children: [
+            { slug: 'overview', title: 'Calendar & Tracking Overview', contentSegments: ['modules', 'calendar-tracking', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'calendar-tracking', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'reports-import-export', title: 'Reports, Import & Export', children: [
+            { slug: 'overview', title: 'Reports & Import/Export Overview', contentSegments: ['modules', 'reports-import-export', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'reports-import-export', 'listing-and-item-actions'] },
+          ] },
+          { slug: 'admin-settings', title: 'Administration & Settings', children: [
+            { slug: 'overview', title: 'Administration Overview', contentSegments: ['modules', 'admin-settings', 'overview'] },
+            { slug: 'listing-and-item-actions', title: 'Listing & Item Page Features', contentSegments: ['modules', 'admin-settings', 'listing-and-item-actions'] },
           ] },
         ],
       },
     },
-  },
-
-
-  
-
-  // ── Plasma FSM ──────────────────────────────────────────────────────────────
+  },  // â”€â”€ Plasma FSM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   'plasma': {
     name: 'Plasma FSM',
     description: 'A Powerful FSM Tool for Plasma.',
-    icon: '🛠️',
+    icon: 'ðŸ› ï¸',
     repo: 'https://github.com/your-org/project-two',
     sections: {
       'getting-started': {
@@ -132,11 +200,11 @@ export const projects = {
       },
     },
   },
-  // ── Econpile ──────────────────────────────────────────────────────────────
+  // â”€â”€ Econpile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   'econpile': {
     name: 'Econpile',
-    description: 'FSM platform — the QR-scan Public Service Portal that lets anyone on site report a fault or fill an asset inspection checklist from a phone, with no login.',
-    icon: '📱',
+    description: 'FSM platform â€” the QR-scan Public Service Portal that lets anyone on site report a fault or fill an asset inspection checklist from a phone, with no login.',
+    icon: 'ðŸ“±',
     sections: {
       'getting-started': {
         title: 'Getting Started',
@@ -198,9 +266,9 @@ export const projects = {
         ],
       },
       'qr-scan-portal': {
-        title: 'QR Scan → Public Portal',
+        title: 'QR Scan â†’ Public Portal',
         pages: [
-          { slug: 'portal', title: 'QR Scan → Public Portal', children: [
+          { slug: 'portal', title: 'QR Scan â†’ Public Portal', children: [
             { slug: 'qr-codes', title: 'QR Codes & URLs', contentPath: 'qr-codes' },
             { slug: 'overview', title: 'Overview', contentPath: 'overview' },
             { slug: 'public-portal', title: 'Public Portal (Frontend)', contentPath: 'public-portal' },
@@ -235,11 +303,11 @@ export const projects = {
     },
   },
 
-  // ── ROKKO ─────────────────────────────────────────────────────────────────
+  // â”€â”€ ROKKO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   'rokko': {
     name: 'ROKKO',
     description: 'A powerful FSM Tool.',
-    icon: '🚀',
+    icon: 'ðŸš€',
     repo: 'https://github.com/your-org/project-one',
     sections: {
       'getting-started': {
@@ -310,4 +378,9 @@ export const projects = {
   
 
 }
+
+
+
+
+
 

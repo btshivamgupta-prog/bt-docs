@@ -1,0 +1,471 @@
+﻿# Administration and Settings Module
+
+SettingController, CustomFieldController, EmailTemplateController, PageTipController, CategoryController, NotificationController, ActivityController, ManageFileController, StorageController, NotesController, HistoryController, and related models provide configuration and shared administration.
+
+Functions include settings/configuration, menus, statuses, tags, custom fields, templates, notifications, activity, files, notes, histories, business hours, holidays, leave, tax, payment modes, units, brands, categories, and permissions. Exact cache behavior and per-setting permission checks are Not verified.
+## Listing page feature
+
+The listing page is the collection/table entry point for this module. The verified Vue files below contain the list loading, search/filter, row navigation, export/download, status, and dialog actions that are documented line-by-line in `listing-and-item-actions.md`. A feature is only considered present when the source action inventory shows it.
+
+### Listing page source files
+- `frontend/src/view/pages/custom-field/Custom-Field.vue`
+- `frontend/src/view/pages/custom-field-v2/CustomFieldListing.vue`
+- `frontend/src/view/pages/custom-field-v2/field-properties/c-input-filed.vue`
+- `frontend/src/view/pages/formBuilder/components/Address.vue`
+- `frontend/src/view/pages/formBuilder/components/CheckBox.vue`
+- `frontend/src/view/pages/formBuilder/components/CheckList.vue`
+- `frontend/src/view/pages/formBuilder/components/Currency.vue`
+- `frontend/src/view/pages/formBuilder/components/Date.vue`
+- `frontend/src/view/pages/formBuilder/components/DecisionBox.vue`
+- `frontend/src/view/pages/formBuilder/components/Description.vue`
+- `frontend/src/view/pages/formBuilder/components/Email.vue`
+- `frontend/src/view/pages/formBuilder/components/ImageUpload.vue`
+- `frontend/src/view/pages/formBuilder/components/MultiLine.vue`
+- `frontend/src/view/pages/formBuilder/components/Name.vue`
+- `frontend/src/view/pages/formBuilder/components/Number.vue`
+- `frontend/src/view/pages/formBuilder/components/PageBreak.vue`
+- `frontend/src/view/pages/formBuilder/components/Phone.vue`
+- `frontend/src/view/pages/formBuilder/components/Radio.vue`
+- `frontend/src/view/pages/formBuilder/components/Rating.vue`
+- `frontend/src/view/pages/formBuilder/components/Section.vue`
+- `frontend/src/view/pages/formBuilder/components/Signature.vue`
+- `frontend/src/view/pages/formBuilder/components/SingleLine.vue`
+- `frontend/src/view/pages/formBuilder/components/TermsAndConditions.vue`
+- `frontend/src/view/pages/formBuilder/components/Time.vue`
+- `frontend/src/view/pages/formBuilder/components/UniqueId.vue`
+- `frontend/src/view/pages/formBuilder/components/Website.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/AddressInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/CheckboxInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/ChecklistInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/CurrencyInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/DateInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/DecisionBoxInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/DescriptionInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/EmailInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/ImageUploadInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/MultiLineInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/NameInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/NumberInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/PageBreakInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/PhoneInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/RadioInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/RatingInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/SectionInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/SignatureInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/SingleLineInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/TermsAndConditionInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/TimeInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/UniqueIdInput.vue`
+- `frontend/src/view/pages/formBuilder/InputComponents/WebsiteInput.vue`
+- `frontend/src/view/pages/formBuilder/Preview.vue`
+- `frontend/src/view/pages/formBuilder/preview/Address.vue`
+- `frontend/src/view/pages/formBuilder/preview/Checkbox.vue`
+- `frontend/src/view/pages/formBuilder/preview/Currency.vue`
+- `frontend/src/view/pages/formBuilder/preview/Date.vue`
+- `frontend/src/view/pages/formBuilder/preview/DecisionBox.vue`
+- `frontend/src/view/pages/formBuilder/preview/Email.vue`
+- `frontend/src/view/pages/formBuilder/preview/MultiLine.vue`
+- `frontend/src/view/pages/formBuilder/preview/Name.vue`
+- `frontend/src/view/pages/formBuilder/preview/Number.vue`
+- `frontend/src/view/pages/formBuilder/preview/PageBreak.vue`
+- `frontend/src/view/pages/formBuilder/preview/Phone.vue`
+- `frontend/src/view/pages/formBuilder/preview/Radio.vue`
+- `frontend/src/view/pages/formBuilder/preview/Rating.vue`
+- `frontend/src/view/pages/formBuilder/preview/Section.vue`
+- `frontend/src/view/pages/formBuilder/preview/Signature.vue`
+- `frontend/src/view/pages/formBuilder/preview/SingleLine.vue`
+- `frontend/src/view/pages/formBuilder/preview/TermsAndCondition.vue`
+- `frontend/src/view/pages/formBuilder/preview/Time.vue`
+- `frontend/src/view/pages/formBuilder/preview/Website.vue`
+- `frontend/src/view/pages/profile/Activity.vue`
+- `frontend/src/view/pages/profile/AdminBasic.vue`
+- `frontend/src/view/pages/profile/EngineerBasic.vue`
+- `frontend/src/view/pages/profile/MyAccount.vue`
+- `frontend/src/view/pages/profile/Profile.vue`
+- `frontend/src/view/pages/profile/Reminder.vue`
+- `frontend/src/view/pages/profile/Setting.vue`
+- `frontend/src/view/pages/profile/Setting/BillingPlanTab.vue`
+- `frontend/src/view/pages/profile/Setting/Branding.vue`
+- `frontend/src/view/pages/profile/Setting/Calendar.vue`
+- `frontend/src/view/pages/profile/Setting/Calendar-Setting.vue`
+- `frontend/src/view/pages/profile/Setting/Company.vue`
+- `frontend/src/view/pages/profile/Setting/Contract.vue`
+- `frontend/src/view/pages/profile/Setting/CountryList.vue`
+- `frontend/src/view/pages/profile/Setting/Customer.vue`
+- `frontend/src/view/pages/profile/Setting/CustomerAsset.vue`
+- `frontend/src/view/pages/profile/Setting/Customer-Review.vue`
+- `frontend/src/view/pages/profile/Setting/Customer-Setting.vue`
+- `frontend/src/view/pages/profile/Setting/Delivery.vue`
+- `frontend/src/view/pages/profile/Setting/EmailTemplate.vue`
+- `frontend/src/view/pages/profile/Setting/Engineer.vue`
+- `frontend/src/view/pages/profile/Setting/Entity.vue`
+- `frontend/src/view/pages/profile/Setting/Equipment.vue`
+- `frontend/src/view/pages/profile/Setting/Expense.vue`
+- `frontend/src/view/pages/profile/Setting/Incident.vue`
+- `frontend/src/view/pages/profile/Setting/Integrate.vue`
+- `frontend/src/view/pages/profile/Setting/Invoice.vue`
+- `frontend/src/view/pages/profile/Setting/InvoiceLocking.vue`
+- `frontend/src/view/pages/profile/Setting/Job.vue`
+- `frontend/src/view/pages/profile/Setting/Lead.vue`
+- `frontend/src/view/pages/profile/Setting/leave.vue`
+- `frontend/src/view/pages/profile/Setting/Leave-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/LineItem.vue`
+- `frontend/src/view/pages/profile/Setting/Module-Setting.vue`
+- `frontend/src/view/pages/profile/Setting/MyAccontUsers.vue`
+- `frontend/src/view/pages/profile/Setting/Note.vue`
+- `frontend/src/view/pages/profile/Setting/Oil-Sample.vue`
+- `frontend/src/view/pages/profile/Setting/OwnAsset.vue`
+- `frontend/src/view/pages/profile/Setting/Part.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Contract-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Customer-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Delivery-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/IncidentReport-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Invoice-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Leave-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Payment-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Product-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Property-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Quotation-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Service-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Supplier-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Team-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Technicians-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Partial/Visit-barcode.vue`
+- `frontend/src/view/pages/profile/Setting/Payment.vue`
+- `frontend/src/view/pages/profile/Setting/Pickup.vue`
+- `frontend/src/view/pages/profile/Setting/Pickup-Address.vue`
+- `frontend/src/view/pages/profile/Setting/Product.vue`
+- `frontend/src/view/pages/profile/Setting/Project.vue`
+- `frontend/src/view/pages/profile/Setting/Property.vue`
+- `frontend/src/view/pages/profile/Setting/Proposal.vue`
+- `frontend/src/view/pages/profile/Setting/Purchase-Order.vue`
+- `frontend/src/view/pages/profile/Setting/Quotation.vue`
+- `frontend/src/view/pages/profile/Setting/Quotation-Invoice.vue`
+- `frontend/src/view/pages/profile/Setting/Quotation-Setting.vue`
+- `frontend/src/view/pages/profile/Setting/RolePermission.vue`
+- `frontend/src/view/pages/profile/Setting/schedule.vue`
+- `frontend/src/view/pages/profile/Setting/Service.vue`
+- `frontend/src/view/pages/profile/Setting/Servicepld.vue`
+- `frontend/src/view/pages/profile/Setting/Siklls-Cert-Lice copy.vue`
+- `frontend/src/view/pages/profile/Setting/Siklls-Cert-Lice.vue`
+- `frontend/src/view/pages/profile/Setting/Supplier.vue`
+- `frontend/src/view/pages/profile/Setting/Supplier-Setting.vue`
+- `frontend/src/view/pages/profile/Setting/Tags-List.vue`
+- `frontend/src/view/pages/profile/Setting/Task.vue`
+- `frontend/src/view/pages/profile/Setting/Taxes.vue`
+- `frontend/src/view/pages/profile/Setting/TermsAndCondition.vue`
+- `frontend/src/view/pages/profile/Setting/Time-Slotes.vue`
+- `frontend/src/view/pages/profile/Setting/Tool.vue`
+- `frontend/src/view/pages/profile/Setting/Visit.vue`
+- `frontend/src/view/pages/profile/Setting/ZoneTemplate.vue`
+- `frontend/src/view/pages/profile/TimeSheet.vue`
+- `frontend/src/view/pages/profile/UserPermission.vue`
+- `frontend/src/view/pages/profile/UserPermissionList.vue`
+- `frontend/src/view/pages/profile/UserRoleTableTemplate.vue`
+- `frontend/src/view/pages/profile/Users.vue`
+- `frontend/src/view/pages/profile/UserTableTemplate.vue`
+- `frontend/src/view/pages/profile/Visit-TImeSheet.vue`
+
+### Listing actions to understand before changing code
+- Search/filter controls change the query or local table state; verify the request parameters before changing filters.
+- Create/add controls navigate to a create page or open a dialog; verify the route and required parent ID.
+- Row/detail controls navigate to the item page; verify route parameters and permission guards.
+- Status, delete, bulk, export, and download controls must be traced to their exact handler because side effects differ by module.
+
+## Item/detail page feature
+
+The item page loads one record, displays related data, and provides create/edit/save/status/document actions where implemented. The source files below are the verified item/detail/create/edit surface.
+
+### Item/detail source files
+- `frontend/src/view/pages/custom-field/Create-Custom-Field.vue`
+- `frontend/src/view/pages/custom-field-v2/CreateCustomField.vue`
+- `frontend/src/view/pages/custom-field-v2/CustomForm.vue`
+- `frontend/src/view/pages/custom-field-v2/CustomFormDetail.vue`
+- `frontend/src/view/pages/custom-field-v2/field-properties/CreateOptions.vue`
+- `frontend/src/view/pages/custom-field-v2/field-properties/c-text-editable.vue`
+- `frontend/src/view/pages/formBuilder/Form.vue`
+- `frontend/src/view/pages/profile/Roles-Detail.vue`
+- `frontend/src/view/pages/profile/Setting/create-address.vue`
+- `frontend/src/view/pages/profile/Setting/CreateEmailTemplate.vue`
+- `frontend/src/view/pages/profile/Setting/CreateRole.vue`
+- `frontend/src/view/pages/profile/Setting/OverviewTab.vue`
+- `frontend/src/view/pages/profile/Setting/ServiceForm.vue`
+- `frontend/src/view/pages/profile/Setting/ServiceFormTemplate.vue`
+- `frontend/src/view/pages/profile/Users-Detail.vue`
+
+### Item actions to understand before changing code
+- Load and option calls define which related records and dropdown values are required.
+- Save/update actions define validation, persistence, status changes, and redirects.
+- Back/edit/status/PDF/email/download actions can have navigation or external side effects.
+- Related tabs and dialogs may write to other modules; check the dependency list and backend route before changing them.
+
+## Button and dependency reference
+
+Use [`listing-and-item-actions.md`](./listing-and-item-actions.md) for every source-detected button/event/navigation line, exact Vue path, line number, and the action-tracing procedure. The companion document is the authoritative button inventory; labels rendered only through shared components or translation keys are marked Not verified.
+## Controller feature map
+
+The following methods are the controller-level entry points verified for this module. Method names are listed so a developer can trace each UI action to the backend implementation without reading unrelated controllers.
+
+### `app/Http/Controllers/SettingController.php`
+- `getEntity()` — line 58
+- `updateStatusEntity()` — line 68
+- `postOrPatchEntity()` — line 85
+- `getCustomersList()` — line 196
+- `getConfiguration()` — line 217
+- `getCompany()` — line 291
+- `getBranding()` — line 327
+- `getCustomer()` — line 346
+- `getProperty()` — line 367
+- `getQuotation()` — line 407
+- `getInvoice()` — line 446
+- `getPayment()` — line 485
+- `getJob()` — line 509
+- `getLeavebarcode()` — line 620
+- `getEngineer()` — line 638
+- `getProduct()` — line 669
+- `getPart()` — line 699
+- `getService()` — line 729
+- `getZonesSetting()` — line 836
+- `getDelivery()` — line 882
+- `getEquipment()` — line 901
+- `getOilSample()` — line 920
+- `updateTestPackageSetting()` — line 943
+- `updatePressureSetting()` — line 988
+- `updateReportSummarySetting()` — line 1032
+- `getOwnAseet()` — line 1070
+- `getCustomerAsset()` — line 1089
+- `getTaxes()` — line 1112
+- `getHeaderFooter()` — line 1132
+- `getSuppliers()` — line 1145
+- `getProjects()` — line 1166
+- `getContracts()` — line 1187
+- `getExpenses()` — line 1208
+- `getTasks()` — line 1229
+- `getPaymentModes()` — line 1250
+- `getProductBrands()` — line 1265
+- `getEquipmentLocations()` — line 1280
+- `getProductManufacturers()` — line 1295
+- `getProductCategories()` — line 1310
+- `getProductUnits()` — line 1325
+- `getLineItem()` — line 1340
+- `getLeads()` — line 1356
+- `getProposals()` — line 1377
+- `getPurchaseOrders()` — line 1398
+- `patchInvoiceLockings()` — line 1419
+- `getInvoiceLockings()` — line 1458
+- `patchCompany()` — line 1497
+- `patchBranding()` — line 1571
+- `patchCustomer()` — line 1637
+- `patchProperty()` — line 1685
+- `patchQuotation()` — line 1733
+- `patchOilSample()` — line 1804
+- `patchInvoice()` — line 1844
+- `patchQuotationInvoice()` — line 1926
+- `patchPayment()` — line 1989
+- `patchJob()` — line 2046
+- `patchJobInvoice()` — line 2186
+- `patchJobApp()` — line 2234
+- `patchJobServiceFormApp()` — line 2276
+- `patchServiceCerts()` — line 2331
+- `patchPdfSettings()` — line 2374
+- `patchQuoSettings()` — line 2408
+- `patchTaxNames()` — line 2438
+- `patchLeave()` — line 2490
+- `patchEngineer()` — line 2531
+- `patchProduct()` — line 2606
+- `patchPart()` — line 2674
+- `patchService()` — line 2742
+- `patchDelivery()` — line 2792
+- `patchBreakTypeSettings()` — line 2842
+- `patchZoneSettings()` — line 2881
+- `patchSubLocationSettings()` — line 2961
+- `patchValiditySetting()` — line 3014
+- `patchZoneShowSettings()` — line 3067
+- `patchIncident()` — line 3094
+- `patchEquipment()` — line 3144
+- `patchOwnAsset()` — line 3194
+- `patchCustomerAsset()` — line 3244
+- `patchTaxes()` — line 3309
+- `patchHeaderFooter()` — line 3401
+- `patchSuppliers()` — line 3459
+- `patchProjects()` — line 3507
+- `patchContracts()` — line 3555
+- `patchExpenses()` — line 3603
+- `patchTasks()` — line 3651
+- `patchLeads()` — line 3699
+- `patchProposals()` — line 3747
+- `patchPurchaseOrders()` — line 3795
+- `patchPaymentModes()` — line 3843
+- `patchProductBrands()` — line 3876
+- `patchOilTypes()` — line 3909
+- `patchElectrode()` — line 3941
+- `patchCollectors()` — line 3975
+- `patchEquipmentLocations()` — line 4026
+- `patchProductManufacturers()` — line 4059
+- `patchProductCategories()` — line 4092
+- `patchEnquiryCategories()` — line 4125
+- `patchServiceSkills()` — line 4160
+- `patchSkills()` — line 4238
+- `deleteServiceTypeWise()` — line 4297
+- `deleteSingledesignation()` — line 4337
+- `deleteTaxNames()` — line 4365
+- `statusChangeServiceTypeWise()` — line 4392
+- `patchJobTypeRatingFlag()` — line 4430
+- `patchServiceLicences()` — line 4454
+- `patchServiceJobTypes()` — line 4540
+- `updateCertificatesTypeWise()` — line 4606
+- `patchProductUnits()` — line 4680
+- `patchLineItem()` — line 4713
+- `deleteTax()` — line 4786
+- `deleteTaxExemption()` — line 4809
+- `getTimeSlotes()` — line 4832
+- `getActiveTimeSlotes()` — line 4843
+- `updateOrCreateSettingLeave()` — line 4859
+- `updateOrCreateSettingTimeSlote()` — line 4931
+- `deleteLeaveSetting()` — line 4995
+- `getSettingLeaveCategory()` — line 5018
+- `getIncidentSetting()` — line 5082
+- `getSettingLeaveCategorys()` — line 5117
+- `getSettingLeave()` — line 5130
+- `patchedesignation()` — line 5141
+- `patchSingledesignation()` — line 5176
+- `patcheImpact()` — line 5232
+- `userdesignation()` — line 5267
+- `customerdesignation()` — line 5308
+- `getActiveQuoteTerms()` — line 5360
+- `getQuoteTerms()` — line 5372
+- `updateStatusQuoteTerm()` — line 5383
+- `postOrPatchQuoteTerm()` — line 5400
+- `updateDefaultQuoteTerm()` — line 5466
+- `getCountryCodes()` — line 5495
+- `createOrUpdateCountryCode()` — line 5506
+- `getAllTags()` — line 5556
+- `updateTable()` — line 5566
+- `updateTopHeaderStatus()` — line 5624
+- `updateVisitCombination()` — line 5691
+- `updateTitle()` — line 5764
+- `calenderType()` — line 5810
+- `createIncidentReport()` — line 5828
+- `getIncidentReport()` — line 5912
+- `getIncidentReport()` — line 6099
+- `deleteIncident()` — line 6353
+- `getIncidentReportdetail()` — line 6368
+- `searchCompany()` — line 6409
+- `updateReportStatus()` — line 6479
+- `getConfig()` — line 6505
+- `listingAll()` — line 6538
+- `filterFieldByModule()` — line 6699
+- `validateAnyField()` — line 6974
+- `patchBankName()` — line 7309
+- `patchInsuranceCompany()` — line 7374
+- `updateScheduleStatus()` — line 7441
+- `getTags()` — line 7468
+- `listSchedule()` — line 7499
+- `updateOrCreateSchedule()` — line 7532
+- `getModels()` — line 7602
+- `patchModels()` — line 7617
+- `getAutocompletes()` — line 7650
+- `patchAutocompletes()` — line 7684
+- `deleteServiceLicences()` — line 7763
+- `deleteServiceSkill()` — line 7794
+- `deleteAutocomplete()` — line 7823
+- `getTimesheets()` — line 7846
+- `getVisisTimesheets()` — line 7992
+- `getAllServiceForm()` — line 8145
+- `deleteJobType()` — line 8293
+- `deleteZoneSettings()` — line 8324
+- `deleteReportSummary()` — line 8356
+- `deleteSubLocationSettings()` — line 8378
+- `deleteValiditySettings()` — line 8408
+- `getValiditySetting()` — line 8443
+- `getModules()` — line 8456
+- `patchModules()` — line 8472
+- `getModulesShow()` — line 8545
+- `getCarts()` — line 8575
+- `postCMSCategoryList()` — line 8672
+- `getCMSCategoryList()` — line 8724
+- `deleteCMSCategoryList()` — line 8748
+- `getTransformerLocation()` — line 8784
+- `getTags()` — line 8799
+- `getTagsListing()` — line 8869
+- `createTags()` — line 8960
+- `deleteTag()` — line 9040
+- `getChecklistlistItem()` — line 9067
+- `getChecklistlistItemSingle()` — line 9098
+- `saveChecklistItem()` — line 9111
+- `updateChecklistItem()` — line 9160
+- `deleteChecklistItem()` — line 9207
+- `patchVisitRatingSetting()` — line 9233
+- `getVisitRatingSetting()` — line 9286
+
+### `app/Http/Controllers/RoleController.php`
+- `updateOrCreate()` — line 22
+- `getRoles()` — line 82
+- `deleteRoles()` — line 106
+- `updateOrCreatePermission()` — line 144
+- `getPermissions()` — line 201
+- `deletePermissions()` — line 226
+
+### `app/Http/Controllers/CompanyController.php`
+- `index()` — line 27
+- `create()` — line 43
+- `exportCustomer()` — line 49
+- `store()` — line 97
+- `dateFormate()` — line 218
+- `show()` — line 234
+- `edit()` — line 245
+- `update()` — line 257
+- `destroy()` — line 268
+
+### `app/Http/Controllers/CustomFieldController.php`
+- `__construct()` — line 23
+- `updateOrCreate()` — line 35
+- `getCustomFields()` — line 90
+- `updateStatusCustomFields()` — line 114
+- `createorupdateCustomtfields()` — line 148
+- `getmoduleFields()` — line 261
+- `getmoduleFieldsbyID()` — line 307
+- `deletemoduleFieldsbyID()` — line 324
+- `storeCustomFieldsData()` — line 351
+- `deleteCustomFieldsData()` — line 504
+- `getCustomFieldsData()` — line 524
+- `CustomFieldsOrderUpdate()` — line 573
+- `CustomFieldsStatusUpdate()` — line 601
+- `CustomFieldsModules()` — line 635
+- `getModules()` — line 693
+- `getAllModules()` — line 710
+- `deleteModules()` — line 727
+- `updateTile()` — line 744
+- `getCustomFieldForm()` — line 777
+- `getFieldTitle()` — line 801
+
+- `app/Http/Controllers/CustomModulesSeeder.php` — Not verified.
+### `app/Http/Controllers/BusinessHoursController.php`
+- `index()` — line 16
+- `create()` — line 26
+- `store()` — line 37
+- `show()` — line 48
+- `edit()` — line 59
+- `update()` — line 71
+- `destroy()` — line 82
+
+### `app/Http/Controllers/TaxController.php`
+- `updateOrCreate()` — line 21
+- `getTaxes()` — line 83
+- `deleteTaxes()` — line 107
+- `updateOrCreateTaxExemption()` — line 144
+- `getTaxExemptions()` — line 206
+- `deleteTaxExemptions()` — line 230
+- `updateStatusTaxes()` — line 267
+- `updateStatusTaxExemptions()` — line 305
+
+### `app/Http/Controllers/ReasonController.php`
+- `ReasonCreateOrUpdate()` — line 22
+- `ReasonLists()` — line 93
+- `deleteReason()` — line 110
+
+- `app/Http/Controllers/StatusController.php` — Not verified.
+### Controller tracing rule
+
+For a button change, trace the Vue handler to its API URL, then to the route in `routes/api.php`, then to the controller method above. Check request validation, authorization, model writes, status transitions, jobs, notifications, PDF/export generation, and error responses before modifying behavior.
+
