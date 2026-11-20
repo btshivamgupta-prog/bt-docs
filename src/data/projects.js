@@ -35,7 +35,7 @@ export const projects = {
   'cmworkz': {
     name: 'CM Werkz',
     description: 'Field-service operations platform with customer, site, service, inventory, finance, and transformer-oil workflows.',
-    icon: 'CM',
+    icon: '\u26A1',
     sections: {
       'getting-started': {
         title: 'Getting Started',
@@ -154,7 +154,7 @@ export const projects = {
   'plasma': {
     name: 'Plasma FSM',
     description: 'A Powerful FSM Tool for Plasma.',
-    icon: 'ðŸ› ï¸',
+    icon: '\uD83D\uDEE0\uFE0F',
     repo: 'https://github.com/your-org/project-two',
     sections: {
       'getting-started': {
@@ -204,7 +204,7 @@ export const projects = {
   'econpile': {
     name: 'Econpile',
     description: 'FSM platform â€” the QR-scan Public Service Portal that lets anyone on site report a fault or fill an asset inspection checklist from a phone, with no login.',
-    icon: 'ðŸ“±',
+    icon: '\uD83D\uDCF1',
     sections: {
       'getting-started': {
         title: 'Getting Started',
@@ -307,7 +307,7 @@ export const projects = {
   'rokko': {
     name: 'ROKKO',
     description: 'A powerful FSM Tool.',
-    icon: 'ðŸš€',
+    icon: '\uD83D\uDE80',
     repo: 'https://github.com/your-org/project-one',
     sections: {
       'getting-started': {
